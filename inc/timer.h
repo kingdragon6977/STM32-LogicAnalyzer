@@ -5,7 +5,7 @@
 
 
 void timer_init(void);
-
+void timer_set_rate(uint32_t hz);
 
 /*
  * Set sampling frequency

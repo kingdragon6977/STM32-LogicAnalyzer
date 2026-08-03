@@ -14,7 +14,7 @@ static volatile uint8_t complete = 0;
 static uint32_t sample_length;
 
 static volatile uint8_t complete;
-
+volatile uint32_t irq_count = 0;
 
 
 void sampler_init(void)
@@ -82,10 +82,7 @@ void sampler_init(void)
 
 
 
-void sampler_start(
-    uint8_t *buf,
-    uint32_t count
-)
+void sampler_start(uint8_t *buf, uint32_t count)
 {
     sample_buffer = buf;
 
@@ -94,7 +91,8 @@ void sampler_start(
     sample_index = 0;
 
     complete = 0;
-
+	
+	irq_count = 0;
 
 
     TIM_SetCounter(
@@ -129,7 +127,7 @@ void TIM2_IRQHandler(void)
     if(TIM_GetITStatus(TIM2, TIM_IT_Update))
     {
         TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
-
+		irq_count++;
       
         if(sample_index < sample_length)
         {

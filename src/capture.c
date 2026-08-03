@@ -3,9 +3,9 @@
 #include "capture.h"
 #include "gpio.h"
 #include "uart.h"
-#include "timer.h"
 
 
+extern volatile uint32_t irq_count;
 
 //#define CAPTURE_SAMPLES 16384
 
@@ -61,8 +61,6 @@ analyzer_mode_t capture_get_mode(void)
 void capture_set_rate(uint32_t hz)
 {
     sample_rate = hz;
-
-    timer_set_rate(hz);
 }
 
 
@@ -472,42 +470,59 @@ void capture_raw(void)
 
     uart_print("Starting sampler...\r\n");
 
-    sampler_start(buffer, CAPTURE_SAMPLES);
+    sampler_start(
+        buffer,
+        CAPTURE_SAMPLES
+    );
 
     uart_print("Sampler running\r\n");
 
+
     while(!sampler_done())
     {
-        // wait
+        /*
+         * wait for DMA/timer sampler
+         */
     }
 
+
     uart_print("Sampler finished\r\n");
+
+    uart_print("IRQ Count: ");
+    uart_print_uint(irq_count);
+    uart_print("\r\n");
 
 
     uart_print("Searching transitions...\r\n");
 
-	uint8_t last = buffer[0];
 
-	for(i=1;i<CAPTURE_SAMPLES;i++)
-	{
-		if(buffer[i] != last)
-		{
-			uart_print("Transition at sample ");
-			uart_print_uint(i);
+    uint8_t last = buffer[0];
 
-			uart_print(" : ");
-	
-			uart_print_hex8(last);
 
-			uart_print(" -> ");
+    for(i = 1; i < CAPTURE_SAMPLES; i++)
+    {
+        if(buffer[i] != last)
+        {
+            uart_print("Transition at sample ");
+            uart_print_uint(i);
 
-			uart_print_hex8(buffer[i]);
+            uart_print(" : ");
 
-			uart_print("\r\n");
-		}
+            uart_print_hex8(last);
 
-    last = buffer[i];
-}
+            uart_print(" -> ");
+
+            uart_print_hex8(buffer[i]);
+
+            uart_print("\r\n");
+        }
+
+
+        last = buffer[i];
+    }
+
+
+    raw_stats();
 
 
     uart_print("\r\nDONE\r\n");

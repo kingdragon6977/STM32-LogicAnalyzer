@@ -36,7 +36,15 @@ int main(void)
 
     capture_init();
 
+	static uint32_t count = 0;
 
+	count++;
+
+	if(count >= 50000)
+	{
+		test_pin_toggle();
+		count = 0;
+	}
 
     uart_print_banner();
 

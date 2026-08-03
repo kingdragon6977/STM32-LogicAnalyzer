@@ -20,7 +20,16 @@ void gpio_init(void)
         ENABLE
     );
 
+	/* GPIOC clock */
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
 
+	GPIO_InitTypeDef gpio;
+
+	gpio.GPIO_Pin   = GPIO_Pin_9;
+	gpio.GPIO_Mode  = GPIO_Mode_Out_PP;
+	gpio.GPIO_Speed = GPIO_Speed_50MHz;
+
+	GPIO_Init(GPIOC, &gpio);
 
    // PA0-PA3 analyzer inputs
 
@@ -119,7 +128,10 @@ int button_pressed(void)
 }
 
 
-
+void test_pin_toggle(void)
+{
+    GPIOC->ODR ^= GPIO_Pin_9;
+}
 
 
 void led_on(void)

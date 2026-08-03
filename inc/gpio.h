@@ -29,7 +29,7 @@ void gpio_init(void);
 
 uint8_t logic_read(void);
 
-
+void test_pin_toggle(void);
 
 /*
  * Button

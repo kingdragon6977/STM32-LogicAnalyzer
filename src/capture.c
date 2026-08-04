@@ -126,19 +126,15 @@ void capture_set_trigger(uint8_t channel,uint8_t rising)
 static uint8_t wait_for_trigger(void)
 {
     uint8_t mask = 1 << trigger_channel;
-
-
     uint8_t last = logic_read();
-
 
     uart_print("Waiting for trigger...\r\n");
 
+    uint32_t timeout = 10000000;
 
-
-    while(1)
+    while(timeout--)
     {
         uint8_t now = logic_read();
-
 
         if(trigger_rising)
         {
@@ -148,7 +144,6 @@ static uint8_t wait_for_trigger(void)
                 return 1;
             }
         }
-
         else
         {
             if((last & mask) && !(now & mask))
@@ -158,9 +153,11 @@ static uint8_t wait_for_trigger(void)
             }
         }
 
-
         last = now;
     }
+
+    uart_print("Trigger timeout\r\n");
+    return 0;
 }
 
 
@@ -419,6 +416,8 @@ void capture_run(void)
 
     uart_print("Hardware sampler running...\r\n");
 
+
+sampler_set_rate(sample_rate);
 
 sampler_start(
     buffer,

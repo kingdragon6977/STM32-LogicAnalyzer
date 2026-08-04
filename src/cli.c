@@ -1,5 +1,5 @@
 #include "cli.h"
-
+#include "test_signal.h"
 #include "uart.h"
 #include "capture.h"
 
@@ -52,7 +52,19 @@ static void process_command(void)
         uart_print(" trigger ch0 rising\r\n");
 
         uart_print(" trigger ch0 falling\r\n");
-
+		
+		uart_print(" test on\r\n");
+		
+		uart_print(" test off\r\n");
+		
+		uart_print(" test 1k\r\n");
+		
+		uart_print(" test 10k\r\n");
+		
+		uart_print(" test 100k\r\n");
+		
+		uart_print(" test 500k\r\n");
+		
         uart_print(" status\r\n");
     }
 
@@ -184,6 +196,52 @@ static void process_command(void)
         uart_print(" Hz\r\n");
     }
 
+		else if(strcmp(cmd,"test on")==0)
+	{
+		test_signal_enable();
+
+		uart_print("Test output enabled\r\n");
+	}
+
+
+	else if(strcmp(cmd,"test off")==0)
+	{
+		test_signal_disable();
+
+		uart_print("Test output disabled\r\n");
+	}
+
+
+	else if(strcmp(cmd,"test 1k")==0)
+	{
+		test_signal_set_rate(1000);
+
+		uart_print("Test frequency: 1000 Hz\r\n");
+	}
+
+
+	else if(strcmp(cmd,"test 10k")==0)
+	{
+		test_signal_set_rate(10000);
+
+		uart_print("Test frequency: 10000 Hz\r\n");
+	}
+
+
+	else if(strcmp(cmd,"test 100k")==0)
+	{
+		test_signal_set_rate(100000);
+
+		uart_print("Test frequency: 100000 Hz\r\n");
+	}
+
+
+	else if(strcmp(cmd,"test 500k")==0)
+	{
+		test_signal_set_rate(500000);
+
+		uart_print("Test frequency: 500000 Hz\r\n");
+	}
 
 
     else

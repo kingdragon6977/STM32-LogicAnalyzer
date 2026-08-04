@@ -11,7 +11,7 @@ void sampler_start(
 );
 
 uint8_t sampler_done(void);
-
+void sampler_set_rate(uint32_t hz);
 
 uint8_t *sampler_get_buffer(void);
 

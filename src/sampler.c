@@ -13,7 +13,7 @@ static volatile uint8_t complete = 0;
 
 static uint32_t sample_length;
 
-static volatile uint8_t complete;
+
 volatile uint32_t irq_count = 0;
 
 
@@ -120,24 +120,33 @@ uint8_t *sampler_get_buffer(void)
     return sample_buffer;
 }
 
+void sampler_set_rate(uint32_t hz)
+{
+    uint32_t period;
 
+    period=(72000000/hz)-1;
+
+    TIM_SetAutoreload(
+        TIM2,
+        period
+    );
+}
 
 void TIM2_IRQHandler(void)
-{	
-    if(TIM_GetITStatus(TIM2, TIM_IT_Update))
+{
+    if(TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)
     {
         TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
-		irq_count++;
-      
-        if(sample_index < sample_length)
-        {
-            sample_buffer[sample_index++] = logic_read();
-        }
-        else
+
+        irq_count++;
+
+        if(sample_index >= sample_length)
         {
             TIM_Cmd(TIM2, DISABLE);
-
             complete = 1;
+            return;
         }
+
+        sample_buffer[sample_index++] = logic_read();
     }
 }

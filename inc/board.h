@@ -20,7 +20,6 @@
 #define UART_RX_PIN      GPIO_Pin_10
 
 
-
 /*
  * Logic analyzer inputs
  *
@@ -38,6 +37,16 @@
 #define CH3_PIN GPIO_Pin_3
 
 
+/*
+ * Hardware test signal
+ *
+ * TIM3_CH1 output on PA6
+ */
+
+#define TEST_SIGNAL_PORT GPIOA
+#define TEST_SIGNAL_PIN  GPIO_Pin_6
+#define TEST_SIGNAL_TIMER TIM3
+
 
 /*
  * Button
@@ -47,7 +56,6 @@
 
 #define BUTTON_PORT GPIOB
 #define BUTTON_PIN  GPIO_Pin_0
-
 
 
 /*

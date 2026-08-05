@@ -109,9 +109,17 @@ void dma_capture_init(void)
         DMA_IT_TC,
         ENABLE
     );
+
+    /*
+     * Enable NVIC for DMA1 Channel2
+     */
+    NVIC_InitTypeDef nvic;
+    nvic.NVIC_IRQChannel = DMA1_Channel2_IRQn;
+    nvic.NVIC_IRQChannelPreemptionPriority = 0;
+    nvic.NVIC_IRQChannelSubPriority = 0;
+    nvic.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&nvic);
 }
-
-
 
 
 
@@ -175,9 +183,32 @@ void dma_capture_start(
 
 
 
-
-
 uint8_t dma_capture_done(void)
 {
     return finished;
+}
+
+
+/*
+ * DMA transfer complete IRQ handler
+ */
+void DMA1_Channel2_IRQHandler(void)
+{
+    if (DMA_GetITStatus(DMA1_IT_TC2))
+    {
+        /* Clear interrupt flag */
+        DMA_ClearITPendingBit(DMA1_IT_TC2);
+
+        /* Stop DMA requests from TIM2 */
+        TIM_DMACmd(TIM2, TIM_DMA_Update, DISABLE);
+
+        /* Stop the timer */
+        TIM_Cmd(TIM2, DISABLE);
+
+        /* Disable the DMA channel */
+        DMA_Cmd(DMA1_Channel2, DISABLE);
+
+        /* Mark finished */
+        finished = 1;
+    }
 }

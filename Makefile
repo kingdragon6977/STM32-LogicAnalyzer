@@ -36,6 +36,7 @@ src/timer.c \
 src/gpio.c \
 src/cli.c \
 src/capture.c \
+src/dma_capture.c \
 system_stm32f10x.c \
 STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.c \
 STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.c \

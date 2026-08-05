@@ -64,5 +64,9 @@ void capture_set_trigger(
 );
 
 
+/* select capture backend: 1 = DMA, 0 = IRQ sampler */
+void capture_set_backend_dma(uint8_t enable);
+uint8_t capture_get_backend_dma(void);
+
 
 #endif

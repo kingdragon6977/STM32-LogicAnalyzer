@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define CAPTURE_SAMPLES 16384
+#define CAPTURE_SAMPLES 8192
 
 void sampler_init(void);
 

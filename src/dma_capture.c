@@ -1,6 +1,7 @@
 #include "stm32f10x.h"
 
 #include "stm32f10x_dma.h"
+#include "stm32f10x_tim.h"
 
 #include "dma_capture.h"
 
@@ -144,10 +145,8 @@ void dma_capture_start(
     );
 
 
-    DMA_SetMemoryAddress(
-        DMA1_Channel2,
-        (uint32_t)buffer
-    );
+    /* Some stdperiph versions don't provide a helper to set the memory address; write directly */
+    DMA1_Channel2->CMAR = (uint32_t)buffer;
 
 
 

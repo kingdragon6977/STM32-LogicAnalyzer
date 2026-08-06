@@ -3,6 +3,7 @@
 
 #include "sampler.h"
 #include "gpio.h"
+#include "uart.h"
 
 
 static uint8_t *sample_buffer;
@@ -22,10 +23,14 @@ volatile uint32_t irq_count = 0;
 
 void sampler_init(void)
 {
+    uart_print("sampler_init: start\r\n");
+
     RCC_APB1PeriphClockCmd(
         RCC_APB1Periph_TIM2,
         ENABLE
     );
+
+    uart_print("sampler_init: clock enabled\r\n");
 
     NVIC_InitTypeDef nvic;
     TIM_TimeBaseInitTypeDef tim;
@@ -37,7 +42,11 @@ void sampler_init(void)
 
     TIM_TimeBaseInit(TIM2, &tim);
 
+    uart_print("sampler_init: tim base init done\r\n");
+
     TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
+
+    uart_print("sampler_init: tim it config done\r\n");
 
     nvic.NVIC_IRQChannel = TIM2_IRQn;
     nvic.NVIC_IRQChannelPreemptionPriority = 0;
@@ -46,7 +55,11 @@ void sampler_init(void)
 
     NVIC_Init(&nvic);
 
+    uart_print("sampler_init: NVIC init done\r\n");
+
     TIM_Cmd(TIM2, DISABLE);
+
+    uart_print("sampler_init: end\r\n");
 }
 
 

@@ -52,6 +52,18 @@ static void process_command(void)
         uart_print(" trigger ch0 rising\r\n");
 
         uart_print(" trigger ch0 falling\r\n");
+
+        uart_print(" trigger ch1 rising\r\n");
+
+        uart_print(" trigger ch1 falling\r\n");
+
+        uart_print(" trigger ch2 rising\r\n");
+
+        uart_print(" trigger ch2 falling\r\n");
+
+        uart_print(" trigger ch3 rising\r\n");
+
+        uart_print(" trigger ch3 falling\r\n");
         	
         uart_print(" test on\r\n");
         	
@@ -171,6 +183,53 @@ static void process_command(void)
         uart_print("Trigger CH0 falling\r\n");
     }
 
+
+    else if(strcmp(cmd,"trigger ch1 rising")==0)
+    {
+        capture_set_trigger(1,1);
+
+        uart_print("Trigger CH1 rising\r\n");
+    }
+
+
+    else if(strcmp(cmd,"trigger ch1 falling")==0)
+    {
+        capture_set_trigger(1,0);
+
+        uart_print("Trigger CH1 falling\r\n");
+    }
+
+
+    else if(strcmp(cmd,"trigger ch2 rising")==0)
+    {
+        capture_set_trigger(2,1);
+
+        uart_print("Trigger CH2 rising\r\n");
+    }
+
+
+    else if(strcmp(cmd,"trigger ch2 falling")==0)
+    {
+        capture_set_trigger(2,0);
+
+        uart_print("Trigger CH2 falling\r\n");
+    }
+
+
+    else if(strcmp(cmd,"trigger ch3 rising")==0)
+    {
+        capture_set_trigger(3,1);
+
+        uart_print("Trigger CH3 rising\r\n");
+    }
+
+
+    else if(strcmp(cmd,"trigger ch3 falling")==0)
+    {
+        capture_set_trigger(3,0);
+
+        uart_print("Trigger CH3 falling\r\n");
+    }
 
     /*
      * BACKEND

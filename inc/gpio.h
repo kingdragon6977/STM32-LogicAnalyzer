@@ -39,6 +39,11 @@ void test_pin_toggle(void);
 
 int button_pressed(void);
 
+/*
+ * Return current raw button level: 0 = pressed (active low), 1 = released
+ */
+int button_level(void);
+
 
 
 /*

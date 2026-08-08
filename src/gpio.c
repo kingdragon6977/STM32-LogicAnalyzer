@@ -69,6 +69,13 @@ int button_pressed(void)
 }
 
 
+/* Return current raw button level: 0 = pressed (active low), 1 = released */
+int button_level(void)
+{
+    return (BUTTON_PORT->IDR & BUTTON_PIN) ? 1 : 0;
+}
+
+
 void led_on(void)
 {
     LED_PORT->BRR = LED_PIN;

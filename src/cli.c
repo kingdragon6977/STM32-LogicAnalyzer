@@ -2,6 +2,7 @@
 #include "test_signal.h"
 #include "uart.h"
 #include "capture.h"
+#include "i2c_master.h"
 
 #include <string.h>
 #include <stdint.h>
@@ -49,21 +50,11 @@ static void process_command(void)
 
         uart_print(" rate 2m\r\n");
 
+        uart_print(" i2c scan\r\n");
+
         uart_print(" trigger ch0 rising\r\n");
 
         uart_print(" trigger ch0 falling\r\n");
-
-        uart_print(" trigger ch1 rising\r\n");
-
-        uart_print(" trigger ch1 falling\r\n");
-
-        uart_print(" trigger ch2 rising\r\n");
-
-        uart_print(" trigger ch2 falling\r\n");
-
-        uart_print(" trigger ch3 rising\r\n");
-
-        uart_print(" trigger ch3 falling\r\n");
         	
         uart_print(" test on\r\n");
         	
@@ -106,6 +97,13 @@ static void process_command(void)
         capture_raw();
     }
 
+
+    else if(strcmp(cmd,"i2c scan")==0)
+    {
+        /* simple I2C bus scan using bit-banged master on CH0/CH1 */
+        i2c_master_init();
+        i2c_master_scan();
+    }
 
 
     /*
@@ -183,53 +181,6 @@ static void process_command(void)
         uart_print("Trigger CH0 falling\r\n");
     }
 
-
-    else if(strcmp(cmd,"trigger ch1 rising")==0)
-    {
-        capture_set_trigger(1,1);
-
-        uart_print("Trigger CH1 rising\r\n");
-    }
-
-
-    else if(strcmp(cmd,"trigger ch1 falling")==0)
-    {
-        capture_set_trigger(1,0);
-
-        uart_print("Trigger CH1 falling\r\n");
-    }
-
-
-    else if(strcmp(cmd,"trigger ch2 rising")==0)
-    {
-        capture_set_trigger(2,1);
-
-        uart_print("Trigger CH2 rising\r\n");
-    }
-
-
-    else if(strcmp(cmd,"trigger ch2 falling")==0)
-    {
-        capture_set_trigger(2,0);
-
-        uart_print("Trigger CH2 falling\r\n");
-    }
-
-
-    else if(strcmp(cmd,"trigger ch3 rising")==0)
-    {
-        capture_set_trigger(3,1);
-
-        uart_print("Trigger CH3 rising\r\n");
-    }
-
-
-    else if(strcmp(cmd,"trigger ch3 falling")==0)
-    {
-        capture_set_trigger(3,0);
-
-        uart_print("Trigger CH3 falling\r\n");
-    }
 
     /*
      * BACKEND

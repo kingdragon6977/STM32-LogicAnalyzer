@@ -160,21 +160,29 @@ static void decode_edges(void)
     uart_print("CH3 edges: "); uart_print_uint(edge_count[3]); uart_print("\r\n");
 }
 
+/*
+ * Passive I2C framing check.
+ * CH0 = SDA, CH1 = SCL.
+ * This first pass identifies START and STOP conditions. A full byte decoder
+ * will be added after acquisition timing is verified.
+ */
 static void decode_i2c(void)
 {
     uint32_t i;
-    uart_print("\r\nI2C Scan\r\n");
+
+    uart_print("\r\nI2C framing\r\n");
+    uart_print("CH0=SDA CH1=SCL\r\n");
 
     for(i=1;i<CAPTURE_SAMPLES;i++)
     {
         uint8_t prev = buffer[i-1];
         uint8_t curr = buffer[i];
 
-        uint8_t scl = (curr >> 1) & 1;
-        uint8_t sda_old = (prev >> 2) & 1;
-        uint8_t sda_new = (curr >> 2) & 1;
+        uint8_t scl_high = ((prev & 0x02) && (curr & 0x02));
+        uint8_t sda_old = prev & 0x01;
+        uint8_t sda_new = curr & 0x01;
 
-        if(scl)
+        if(scl_high)
         {
             if(sda_old && !sda_new)
             {
@@ -239,7 +247,7 @@ void capture_raw(void)
 
         while(!dma_capture_done())
         {
-            /* Keep the CPU out of the sample path; DMA fills the buffer. */
+            /* DMA owns the sample path until the buffer is full. */
         }
 
         uart_print("DMA sampling complete\r\n");
@@ -325,9 +333,7 @@ void capture_run(void)
         dma_capture_start(buffer, CAPTURE_SAMPLES);
 
         while(!dma_capture_done())
-        {
             cli_task();
-        }
 
         uart_print("DMA sampling complete\r\n");
     }
@@ -338,9 +344,7 @@ void capture_run(void)
         sampler_start(buffer, CAPTURE_SAMPLES);
 
         while(!sampler_done())
-        {
             cli_task();
-        }
 
         uart_print("IRQ sampling complete\r\n");
     }

@@ -204,6 +204,61 @@ static void raw_stats(void)
     uart_print("\r\n");
 }
 
+/* export capture buffer as ASCII hex over UART for host-side import */
+void capture_raw(void)
+{
+    uint32_t i;
+
+    uart_print("\r\nRAW_CAPTURE\r\n");
+    uart_print("Samples : "); uart_print_uint(CAPTURE_SAMPLES); uart_print("\r\n");
+    uart_print("Rate : "); uart_print_uint(sample_rate); uart_print(" Hz\r\n");
+
+    if(!wait_for_trigger()) return;
+
+    uart_print("Capture Started\r\n");
+
+    if(backend_use_dma)
+    {
+        uart_print("Hardware DMA sampler running...\r\n");
+        sampler_set_rate(sample_rate);
+        dma_capture_start(buffer, CAPTURE_SAMPLES);
+
+        while(!dma_capture_done())
+        {
+            cli_task(); /* keep CLI responsive */
+        }
+        uart_print("DMA sampling complete\r\n");
+    }
+    else
+    {
+        uart_print("Hardware IRQ sampler running...\r\n");
+        sampler_set_rate(sample_rate);
+        sampler_start(buffer, CAPTURE_SAMPLES);
+
+        while(!sampler_done())
+        {
+            cli_task();
+        }
+        uart_print("IRQ sampling complete\r\n");
+    }
+
+    /* Transmit header so host can find the stream */
+    uart_print("BEGIN_RAW_HEX\r\n");
+    /* send hex dump: each sample as two hex chars */
+    for(i = 0; i < CAPTURE_SAMPLES; ++i)
+    {
+        uint8_t v = buffer[i];
+        char hi = (v >> 4) < 10 ? '0' + (v >> 4) : 'A' + ((v >> 4) - 10);
+        char lo = (v & 0xF) < 10 ? '0' + (v & 0xF) : 'A' + ((v & 0xF) - 10);
+
+        uart_putc(hi);
+        uart_putc(lo);
+        if ((i & 0x3F) == 0x3F) uart_putc('\n');
+    }
+    uart_print("\r\nEND_RAW_HEX\r\n");
+    uart_print("RAW_DONE\r\n");
+}
+
 void capture_run(void)
 {
     uint32_t i;
@@ -249,41 +304,6 @@ void capture_run(void)
 
     if(mode==MODE_EDGE) decode_edges();
     if(mode==MODE_I2C) decode_i2c();
-
-    uart_print("\r\nDONE\r\n");
-}
-
-void capture_raw(void)
-{
-    uint32_t i;
-
-    uart_print("\r\nRAW CAPTURE\r\n");
-    uart_print("Starting sampler...\r\n");
-
-    sampler_start(buffer, CAPTURE_SAMPLES);
-    uart_print("Sampler running\r\n");
-
-    while(!sampler_done()) { /* wait */ }
-
-    uart_print("Sampler finished\r\n");
-    uart_print("IRQ Count: "); uart_print_uint(irq_count); uart_print("\r\n");
-    uart_print("Searching transitions...\r\n");
-
-    uint8_t last = buffer[0];
-    for(i = 1; i < CAPTURE_SAMPLES; i++)
-    {
-        if(buffer[i] != last)
-        {
-            uart_print("Transition at sample ");
-            uart_print_uint(i);
-            uart_print(" : ");
-            uart_print_hex8(last);
-            uart_print(" -> ");
-            uart_print_hex8(buffer[i]);
-            uart_print("\r\n");
-        }
-        last = buffer[i];
-    }
 
     raw_stats();
     uart_print("\r\nDONE\r\n");

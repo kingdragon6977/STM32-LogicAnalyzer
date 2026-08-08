@@ -5,7 +5,8 @@
 #include "gpio.h"
 #include "capture.h"
 #include "cli.h"
-
+#include "i2c_master.h"
+#include "board.h"
 
 static void delay(volatile uint32_t d)
 {
@@ -27,7 +28,8 @@ int main(void)
 	test_signal_init();
 	
     capture_init();
-
+	
+	
 
     uart_print_banner();
 

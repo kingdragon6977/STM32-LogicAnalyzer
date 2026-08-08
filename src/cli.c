@@ -3,7 +3,7 @@
 #include "uart.h"
 #include "capture.h"
 #include "i2c_master.h"
-
+#include "board.h"
 #include <string.h>
 #include <stdint.h>
 

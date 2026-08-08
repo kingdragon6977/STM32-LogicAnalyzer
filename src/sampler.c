@@ -1,10 +1,10 @@
 #include "stm32f10x.h"
 #include "stm32f10x_tim.h"
+#include <stddef.h>
 
 #include "sampler.h"
 #include "gpio.h"
 #include "uart.h"
-
 
 static uint8_t *sample_buffer;
 static volatile uint32_t sample_index;
@@ -20,21 +20,13 @@ static uint32_t post_trigger_count = 0;
 
 volatile uint32_t irq_count = 0;
 
-
 void sampler_init(void)
 {
-    uart_print("sampler_init: start\r\n");
+    /* Configure TIM2 base but DO NOT enable the update interrupt or NVIC here.
+       Interrupts will be enabled in sampler_start() after the buffer is set. */
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
 
-    RCC_APB1PeriphClockCmd(
-        RCC_APB1Periph_TIM2,
-        ENABLE
-    );
-
-    uart_print("sampler_init: clock enabled\r\n");
-
-    NVIC_InitTypeDef nvic;
     TIM_TimeBaseInitTypeDef tim;
-
     tim.TIM_Prescaler = 0;
     tim.TIM_CounterMode = TIM_CounterMode_Up;
     tim.TIM_Period = 71;
@@ -42,29 +34,13 @@ void sampler_init(void)
 
     TIM_TimeBaseInit(TIM2, &tim);
 
-    uart_print("sampler_init: tim base init done\r\n");
-
-    TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
-
-    uart_print("sampler_init: tim it config done\r\n");
-
-    nvic.NVIC_IRQChannel = TIM2_IRQn;
-    nvic.NVIC_IRQChannelPreemptionPriority = 0;
-    nvic.NVIC_IRQChannelSubPriority = 0;
-    nvic.NVIC_IRQChannelCmd = ENABLE;
-
-    NVIC_Init(&nvic);
-
-    uart_print("sampler_init: NVIC init done\r\n");
-
+    /* Make sure timer is disabled until sampler_start() enables it */
     TIM_Cmd(TIM2, DISABLE);
-
-    uart_print("sampler_init: end\r\n");
 }
-
 
 void sampler_start(uint8_t *buf, uint32_t count)
 {
+    /* Prepare the buffer/state BEFORE enabling the IRQ */
     sample_buffer = buf;
     sample_length = count;
     sample_index = 0;
@@ -72,10 +48,19 @@ void sampler_start(uint8_t *buf, uint32_t count)
     trigger_enabled = 0;
     irq_count = 0;
 
+    /* Now enable the TIM update interrupt and NVIC safely */
+    TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
+
+    NVIC_InitTypeDef nvic;
+    nvic.NVIC_IRQChannel = TIM2_IRQn;
+    nvic.NVIC_IRQChannelPreemptionPriority = 0;
+    nvic.NVIC_IRQChannelSubPriority = 0;
+    nvic.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&nvic);
+
     TIM_SetCounter(TIM2, 0);
     TIM_Cmd(TIM2, ENABLE);
 }
-
 
 void sampler_start_triggered(uint8_t *buf, uint32_t count, uint8_t channel, uint8_t rising)
 {
@@ -92,22 +77,29 @@ void sampler_start_triggered(uint8_t *buf, uint32_t count, uint8_t channel, uint
     post_trigger_count = 0;
     last_sample = logic_read();
 
+    /* Ensure IRQs are enabled (in case they were not already) */
+    TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
+
+    NVIC_InitTypeDef nvic;
+    nvic.NVIC_IRQChannel = TIM2_IRQn;
+    nvic.NVIC_IRQChannelPreemptionPriority = 0;
+    nvic.NVIC_IRQChannelSubPriority = 0;
+    nvic.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&nvic);
+
     TIM_SetCounter(TIM2, 0);
     TIM_Cmd(TIM2, ENABLE);
 }
-
 
 uint8_t sampler_done(void)
 {
     return complete;
 }
 
-
 uint8_t *sampler_get_buffer(void)
 {
     return sample_buffer;
 }
-
 
 void sampler_set_rate(uint32_t hz)
 {
@@ -116,16 +108,23 @@ void sampler_set_rate(uint32_t hz)
     if(hz == 0)
         return;
 
-    period = (72000000 / hz) - 1;
+    /* Use SystemCoreClock rather than a hardcoded 72 MHz constant */
+    period = (SystemCoreClock / hz) - 1;
 
     TIM_SetAutoreload(TIM2, period);
 }
-
 
 void TIM2_IRQHandler(void)
 {
     if(TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)
     {
+        /* Defensive checks: return safely if buffer not prepared or index out of range */
+        if(sample_buffer == NULL || sample_index >= sample_length)
+        {
+            TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
+            return;
+        }
+
         uint8_t sample;
 
         TIM_ClearITPendingBit(TIM2, TIM_IT_Update);

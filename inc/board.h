@@ -49,6 +49,21 @@
 
 
 /*
+ * Bit-banged I2C master for external boards
+ *
+ * PC9  = SDA
+ * PC12 = SCL
+ *
+ * These pins are intentionally separate from the four analyzer inputs.
+ * The external I2C bus must provide its own 3.3 V pull-ups.
+ */
+
+#define I2C_MASTER_GPIO_PORT GPIOC
+#define I2C_MASTER_SDA_PIN   GPIO_Pin_9
+#define I2C_MASTER_SCL_PIN   GPIO_Pin_12
+
+
+/*
  * Button
  *
  * PB0 active low

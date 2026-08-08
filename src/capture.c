@@ -25,7 +25,6 @@ static volatile uint8_t backend_use_dma = 1;
 void capture_init(void)
 {
     capture_set_trigger(0,1);
-    /* initialize DMA capture support */
     dma_capture_init();
 }
 
@@ -53,12 +52,13 @@ void capture_set_rate_enum(capture_rate_t rate)
 {
     switch(rate)
     {
-        case RATE_1K:  capture_set_rate(1000); break;
-        case RATE_100K: capture_set_rate(100000); break;
-        case RATE_500K: capture_set_rate(500000); break;
-        case RATE_1M: capture_set_rate(1000000); break;
-        case RATE_2M: capture_set_rate(2000000); break;
+        case RATE_1K:    capture_set_rate(1000); break;
+        case RATE_100K:  capture_set_rate(100000); break;
+        case RATE_500K:  capture_set_rate(500000); break;
+        case RATE_1M:    capture_set_rate(1000000); break;
+        case RATE_2M:    capture_set_rate(2000000); break;
     }
+
     uart_print("Sample rate set.\r\n");
 }
 
@@ -68,7 +68,6 @@ void capture_set_trigger(uint8_t channel,uint8_t rising)
     trigger_rising = rising ? 1 : 0;
 }
 
-/* Backend control functions */
 void capture_set_backend_dma(uint8_t enable)
 {
     backend_use_dma = enable ? 1 : 0;
@@ -83,10 +82,9 @@ static uint8_t wait_for_trigger(void)
 {
     uint8_t mask = 1 << trigger_channel;
     uint8_t last = logic_read();
+    uint32_t timeout = 10000000;
 
     uart_print("Waiting for trigger...\r\n");
-
-    uint32_t timeout = 10000000;
 
     while(timeout--)
     {
@@ -178,8 +176,19 @@ static void decode_i2c(void)
 
         if(scl)
         {
-            if(sda_old && !sda_new) { uart_print("START @ "); uart_print_uint(i); uart_print("\r\n"); }
-            if(!sda_old && sda_new) { uart_print("STOP @ "); uart_print_uint(i); uart_print("\r\n"); }
+            if(sda_old && !sda_new)
+            {
+                uart_print("START @ ");
+                uart_print_uint(i);
+                uart_print("\r\n");
+            }
+
+            if(!sda_old && sda_new)
+            {
+                uart_print("STOP @ ");
+                uart_print_uint(i);
+                uart_print("\r\n");
+            }
         }
     }
 }
@@ -199,23 +208,28 @@ static void raw_stats(void)
         }
     }
 
-    uart_print("Edges: ");
+    uart_print("Transitions: ");
     uart_print_uint(edges);
     uart_print("\r\n");
 }
 
-/* export capture buffer as ASCII hex over UART for host-side import */
+/*
+ * RAW capture deliberately does NOT wait for a trigger.
+ * It starts sampling immediately so it can be used to verify the acquisition
+ * hardware and to capture an arbitrary short event on the SA-SD35.
+ */
 void capture_raw(void)
 {
     uint32_t i;
 
     uart_print("\r\nRAW_CAPTURE\r\n");
-    uart_print("Samples : "); uart_print_uint(CAPTURE_SAMPLES); uart_print("\r\n");
-    uart_print("Rate : "); uart_print_uint(sample_rate); uart_print(" Hz\r\n");
-
-    if(!wait_for_trigger()) return;
-
-    uart_print("Capture Started\r\n");
+    uart_print("Samples : ");
+    uart_print_uint(CAPTURE_SAMPLES);
+    uart_print("\r\n");
+    uart_print("Rate : ");
+    uart_print_uint(sample_rate);
+    uart_print(" Hz\r\n");
+    uart_print("Capture starts immediately\r\n");
 
     if(backend_use_dma)
     {
@@ -225,8 +239,9 @@ void capture_raw(void)
 
         while(!dma_capture_done())
         {
-            cli_task(); /* keep CLI responsive */
+            /* Keep the CPU out of the sample path; DMA fills the buffer. */
         }
+
         uart_print("DMA sampling complete\r\n");
     }
     else
@@ -237,24 +252,42 @@ void capture_raw(void)
 
         while(!sampler_done())
         {
-            cli_task();
+            /* IRQ sampler owns acquisition until the buffer is full. */
         }
+
         uart_print("IRQ sampling complete\r\n");
     }
 
-    /* Transmit header so host can find the stream */
-    uart_print("BEGIN_RAW_HEX\r\n");
-    /* send hex dump: each sample as two hex chars */
-    for(i = 0; i < CAPTURE_SAMPLES; ++i)
+    raw_stats();
+
+    uart_print("First 128 samples:\r\n");
+
+    for(i=0; i<128 && i<CAPTURE_SAMPLES; i++)
     {
         uint8_t v = buffer[i];
-        char hi = (v >> 4) < 10 ? '0' + (v >> 4) : 'A' + ((v >> 4) - 10);
-        char lo = (v & 0xF) < 10 ? '0' + (v & 0xF) : 'A' + ((v & 0xF) - 10);
+        char hi = ((v >> 4) < 10) ? ('0' + (v >> 4)) : ('A' + ((v >> 4) - 10));
+        char lo = ((v & 0x0F) < 10) ? ('0' + (v & 0x0F)) : ('A' + ((v & 0x0F) - 10));
 
         uart_putc(hi);
         uart_putc(lo);
-        if ((i & 0x3F) == 0x3F) uart_putc('\n');
+        uart_putc(((i & 0x0F) == 0x0F) ? '\n' : ' ');
     }
+
+    uart_print("\r\nBEGIN_RAW_HEX\r\n");
+
+    for(i=0; i<CAPTURE_SAMPLES; ++i)
+    {
+        uint8_t v = buffer[i];
+        char hi = ((v >> 4) < 10) ? ('0' + (v >> 4)) : ('A' + ((v >> 4) - 10));
+        char lo = ((v & 0x0F) < 10) ? ('0' + (v & 0x0F)) : ('A' + ((v & 0x0F) - 10));
+
+        uart_putc(hi);
+        uart_putc(lo);
+
+        if((i & 0x3F) == 0x3F)
+            uart_putc('\n');
+    }
+
     uart_print("\r\nEND_RAW_HEX\r\n");
     uart_print("RAW_DONE\r\n");
 }
@@ -263,17 +296,25 @@ void capture_run(void)
 {
     uint32_t i;
 
-    for(i=0;i<4;i++) edge_count[i]=0;
+    for(i=0;i<4;i++)
+        edge_count[i]=0;
 
     uart_print("\r\n====================================\r\n");
     uart_print("STM32 Logic Analyzer v1.0\r\n");
     uart_print("====================================\r\n");
 
-    uart_print("Samples : "); uart_print_uint(CAPTURE_SAMPLES); uart_print("\r\n");
-    uart_print("Rate : "); uart_print_uint(sample_rate); uart_print(" Hz\r\n");
+    uart_print("Samples : ");
+    uart_print_uint(CAPTURE_SAMPLES);
+    uart_print("\r\n");
+
+    uart_print("Rate : ");
+    uart_print_uint(sample_rate);
+    uart_print(" Hz\r\n");
+
     uart_print("Analyzer Armed\r\n");
 
-    if(!wait_for_trigger()) return;
+    if(!wait_for_trigger())
+        return;
 
     uart_print("Capture Started\r\n");
 
@@ -285,8 +326,9 @@ void capture_run(void)
 
         while(!dma_capture_done())
         {
-            cli_task(); /* keep CLI responsive */
+            cli_task();
         }
+
         uart_print("DMA sampling complete\r\n");
     }
     else
@@ -299,11 +341,15 @@ void capture_run(void)
         {
             cli_task();
         }
+
         uart_print("IRQ sampling complete\r\n");
     }
 
-    if(mode==MODE_EDGE) decode_edges();
-    if(mode==MODE_I2C) decode_i2c();
+    if(mode==MODE_EDGE)
+        decode_edges();
+
+    if(mode==MODE_I2C)
+        decode_i2c();
 
     raw_stats();
     uart_print("\r\nDONE\r\n");

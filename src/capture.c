@@ -22,6 +22,20 @@ static uint32_t edge_count[4];
 /* Backend: 1 = DMA (default), 0 = IRQ sampler */
 static volatile uint8_t backend_use_dma = 1;
 
+/*
+ * The DMA engine reads the complete GPIOA input register. Only PA0-PA3
+ * belong to the four analyzer channels, so normalize every sample before
+ * decoding or displaying it. This prevents unrelated GPIOA pins (for
+ * example PA7) from appearing as analyzer data.
+ */
+static void normalize_samples(void)
+{
+    uint32_t i;
+
+    for(i = 0; i < CAPTURE_SAMPLES; i++)
+        buffer[i] &= 0x0F;
+}
+
 void capture_init(void)
 {
     capture_set_trigger(0,1);
@@ -266,6 +280,7 @@ void capture_raw(void)
         uart_print("IRQ sampling complete\r\n");
     }
 
+    normalize_samples();
     raw_stats();
 
     uart_print("First 128 samples:\r\n");
@@ -348,6 +363,8 @@ void capture_run(void)
 
         uart_print("IRQ sampling complete\r\n");
     }
+
+    normalize_samples();
 
     if(mode==MODE_EDGE)
         decode_edges();

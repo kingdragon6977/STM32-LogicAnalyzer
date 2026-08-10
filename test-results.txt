@@ -1,0 +1,194 @@
+> test 100k
+> Test frequency: 100000 Hz
+> rate 2m
+> Sample rate set.
+> capture raw
+
+RAW\_CAPTURE
+Samples : 8192
+Rate : 2000000 Hz
+Capture starts immediately
+Hardware DMA sampler running...
+DMA sampling complete
+Transitions: 819
+
+Transition report
+First transitions (max 32):
+S=9 01 -> 00 CH0↓
+S=19 00 -> 01 CH0↑
+S=29 01 -> 00 CH0↓
+S=39 00 -> 01 CH0↑
+S=49 01 -> 00 CH0↓
+S=59 00 -> 01 CH0↑
+S=69 01 -> 00 CH0↓
+S=79 00 -> 01 CH0↑
+S=89 01 -> 00 CH0↓
+S=99 00 -> 01 CH0↑
+S=109 01 -> 00 CH0↓
+S=119 00 -> 01 CH0↑
+S=129 01 -> 00 CH0↓
+S=139 00 -> 01 CH0↑
+S=149 01 -> 00 CH0↓
+S=159 00 -> 01 CH0↑
+S=169 01 -> 00 CH0↓
+S=179 00 -> 01 CH0↑
+S=189 01 -> 00 CH0↓
+S=199 00 -> 01 CH0↑
+S=209 01 -> 00 CH0↓
+S=219 00 -> 01 CH0↑
+S=229 01 -> 00 CH0↓
+S=239 00 -> 01 CH0↑
+S=249 01 -> 00 CH0↓
+S=259 00 -> 01 CH0↑
+S=269 01 -> 00 CH0↓
+S=279 00 -> 01 CH0↑
+S=289 01 -> 00 CH0↓
+S=299 00 -> 01 CH0↑
+S=309 01 -> 00 CH0↓
+S=319 00 -> 01 CH0↑
+
+Transition summary
+Total : 819
+First : 9 samples
+Min gap: 10 samples
+Max gap: 10 samples
+
+First 128 samples:
+01 01 01 01 01 01 01 01 01 00 00 00 00 00 00 00
+00 00 00 01 01 01 01 01 01 01 01 01 01 00 00 00
+00 00 00 00 00 001
+1
+1
+0
+0
+1
+
+> test 500k
+> Test frequency: 500000 Hz
+> rate 2n
+> Unknown command
+> rate 2m
+> Sample rate set.
+> capture raw
+
+RAW\_CAPTURE
+Samples : 8192
+Rate : 2000000 Hz
+Capture starts immediately
+Hardware DMA sampler running...
+DMA sampling complete
+Transitions: 4096
+
+Transition report
+First transitions (max 32):
+S=1 01 -> 00 CH0↓
+S=3 00 -> 01 CH0↑
+S=5 01 -> 00 CH0↓
+S=7 00 -> 01 CH0↑
+S=9 01 -> 00 CH0↓
+S=11 00 -> 01 CH0↑
+S=13 01 -> 00 CH0↓
+S=15 00 -> 01 CH0↑
+S=17 01 -> 00 CH0↓
+S=19 00 -> 01 CH0↑
+S=21 01 -> 00 CH0↓
+S=23 00 -> 01 CH0↑
+S=25 01 -> 00 CH0↓
+S=27 00 -> 01 CH0↑
+S=29 01 -> 00 CH0↓
+S=31 00 -> 01 CH0↑
+S=33 01 -> 00 CH0↓
+S=35 00 -> 01 CH0↑
+S=37 01 -> 00 CH0↓
+S=39 00 -> 01 CH0↑
+S=41 01 -> 00 CH0↓
+S=43 00 -> 01 CH0↑
+S=45 01 -> 00 CH0↓
+S=47 00 -> 01 CH0↑
+S=49 01 -> 00 CH0↓
+S=51 00 -> 01 CH0↑
+S=53 01 -> 00 CH0↓
+S=55 00 -> 01 CH0↑
+S=57 01 -> 00 CH0↓
+S=59 00 -> 01 CH0↑
+S=61 01 -> 00 CH0↓
+S=63 00 -> 01 CH0↑
+
+Transition summary
+Total : 4096
+First : 1 samples
+Min gap: 2 samples
+Max gap: 2 samples
+
+First 128 samples:
+01 00 00 01 01 00 00 01 01 00 00 01 01 00 00 01
+01 00 00 01 01 00 00 01 01 00 00 01 01 00 00 01
+01 00 00 01 01 001
+1
+1
+1
+1
+1
+
+all 4 tied together 
+
+> capture raw
+
+RAW\_CAPTURE
+Samples : 8192
+Rate : 2000000 Hz
+Capture starts immediately
+Hardware DMA sampler running...
+DMA sampling complete
+Transitions: 4096
+
+Transition report
+First transitions (max 32):
+S=1 00 -> 0F CH0↑
+S=3 0F -> 00 CH0↓
+S=5 00 -> 0F CH0↑
+S=7 0F -> 00 CH0↓
+S=9 00 -> 0F CH0↑
+S=11 0F -> 00 CH0↓
+S=13 00 -> 0F CH0↑
+S=15 0F -> 00 CH0↓
+S=17 00 -> 0F CH0↑
+S=19 0F -> 00 CH0↓
+S=21 00 -> 0F CH0↑
+S=23 0F -> 00 CH0↓
+S=25 00 -> 0F CH0↑
+S=27 0F -> 00 CH0↓
+S=29 00 -> 0F CH0↑
+S=31 0F -> 00 CH0↓
+S=33 00 -> 0F CH0↑
+S=35 0F -> 00 CH0↓
+S=37 00 -> 0F CH0↑
+S=39 0F -> 00 CH0↓
+S=41 00 -> 0F CH0↑
+S=43 0F -> 00 CH0↓
+S=45 00 -> 0F CH0↑
+S=47 0F -> 00 CH0↓
+S=49 00 -> 0F CH0↑
+S=51 0F -> 00 CH0↓
+S=53 00 -> 0F CH0↑
+S=55 0F -> 00 CH0↓
+S=57 00 -> 0F CH0↑
+S=59 0F -> 00 CH0↓
+S=61 00 -> 0F CH0↑
+S=63 0F -> 00 CH0↓
+
+Transition summary
+Total : 4096
+First : 1 samples
+Min gap: 2 samples
+Max gap: 2 samples
+
+First 128 samples:
+00 0F 0F 00 00 0F 0F 00 00 0F 0F 00 00 0F 0F 00
+00 0F 0F 00 00 0F 0F 00 00 0F 0F 00 00 0F 0F 00
+00 0F 0F 00 00 0F0
+0
+0
+0
+0
+0

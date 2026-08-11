@@ -3,6 +3,8 @@
 #include "uart.h"
 #include "i2c_master.h"
 #include "board.h"
+#include "sampler.h"
+#include "dma_capture.h"
 
 /*
  * Conservative bit-banged I2C master.
@@ -12,9 +14,6 @@
  *
  * The external bus must have 3.3 V pull-up resistors. The STM32 pins are
  * open-drain: writing a logic 1 releases the line rather than driving it high.
- *
- * This implementation is intentionally slow and includes SCL clock-stretch
- * checking so it is suitable for probing an unknown 3.3 V touchpad bus.
  */
 
 #define I2C_PORT I2C_MASTER_GPIO_PORT
@@ -81,10 +80,6 @@ static uint8_t scl_read(void)
     return (I2C_PORT->IDR & SCL_PIN) ? 1 : 0;
 }
 
-/*
- * Release SCL and wait for the slave to let it go high.
- * Returns 1 on success, 0 if the bus is stuck low.
- */
 static uint8_t scl_release_wait(void)
 {
     uint32_t timeout = 10000;
@@ -156,8 +151,6 @@ static uint8_t i2c_write_byte_raw(uint8_t value)
         return 0;
 
     i2c_delay();
-
-    /* ACK is active low. */
     value = !sda_read();
 
     scl_write(0);
@@ -186,10 +179,6 @@ void i2c_master_init(void)
         uart_print("WARNING: I2C bus not idle\r\n");
 }
 
-/*
- * Scan the normal 7-bit address range used by I2C devices.
- * Reserved addresses below 0x08 and above 0x77 are skipped.
- */
 void i2c_master_scan(void)
 {
     uint8_t address;
@@ -215,9 +204,7 @@ void i2c_master_scan(void)
             break;
         }
 
-        /* Address byte: 7-bit address + write bit. */
         ack = i2c_write_byte_raw((uint8_t)(address << 1));
-
         i2c_stop();
 
         if(ack)
@@ -237,7 +224,6 @@ void i2c_master_scan(void)
     uart_print("I2C scan done\r\n");
 }
 
-/* Write register + one data byte. Returns 1 on complete ACK sequence. */
 int i2c_master_write_byte(uint8_t addr7, uint8_t reg, uint8_t value)
 {
     uint8_t ack;
@@ -270,15 +256,7 @@ int i2c_master_write_byte(uint8_t addr7, uint8_t reg, uint8_t value)
     return 1;
 }
 
-/*
- * Generate known I2C traffic for analyzer loopback testing.
- *
- * With PC9 connected to PA0 and PC12 connected to PA1, capture raw data
- * should show a START, address 0x50, register 0x12, data 0x34, data 0x56,
- * followed by STOP. There is deliberately no slave at 0x50, so the address
- * and data bytes will normally be NACKed; the electrical waveform is still
- * valid and is ideal for validating the passive decoder.
- */
+/* Generate known I2C traffic for a simple electrical test. */
 int i2c_master_test_transaction(void)
 {
     uint8_t ack_addr;
@@ -294,24 +272,172 @@ int i2c_master_test_transaction(void)
         return 0;
     }
 
-    ack_addr = i2c_write_byte_raw(0x50 << 1);
-    ack_reg  = i2c_write_byte_raw(0x12);
+    ack_addr  = i2c_write_byte_raw(0x50 << 1);
+    ack_reg   = i2c_write_byte_raw(0x12);
     ack_data1 = i2c_write_byte_raw(0x34);
     ack_data2 = i2c_write_byte_raw(0x56);
 
     i2c_stop();
 
-    uart_print("ACKs: addr=");
-    uart_print_uint(ack_addr);
-    uart_print(" reg=");
-    uart_print_uint(ack_reg);
-    uart_print(" data1=");
-    uart_print_uint(ack_data1);
-    uart_print(" data2=");
-    uart_print_uint(ack_data2);
+    uart_print("ACKs: addr="); uart_print_uint(ack_addr);
+    uart_print(" reg="); uart_print_uint(ack_reg);
+    uart_print(" data1="); uart_print_uint(ack_data1);
+    uart_print(" data2="); uart_print_uint(ack_data2);
     uart_print("\r\n");
 
     return 1;
+}
+
+/*
+ * Synchronized self-test:
+ *
+ *   PA0 <- PC9  (SDA)
+ *   PA1 <- PC12 (SCL)
+ *
+ * DMA is armed BEFORE the master starts the transaction, so there is no
+ * race between "capture" and "generate". The captured waveform is then
+ * decoded locally. This validates the complete path without requiring a
+ * second I2C device.
+ */
+int i2c_master_capture_test(void)
+{
+    static uint8_t capture_buffer[CAPTURE_SAMPLES];
+    uint32_t i;
+    uint32_t starts = 0;
+    uint32_t stops = 0;
+    uint32_t bytes = 0;
+    uint32_t acks = 0;
+    uint32_t nacks = 0;
+    uint8_t in_frame = 0;
+    uint8_t bit_count = 0;
+    uint8_t shift = 0;
+    uint8_t first_byte = 1;
+    uint8_t prev;
+
+    uart_print("\r\nI2C ANALYZER SELF-TEST\r\n");
+    uart_print("Wiring: PC9->PA0 (SDA), PC12->PA1 (SCL)\r\n");
+    uart_print("Capture rate forced to 1 MHz\r\n");
+
+    /* TIM2 is the DMA sample clock. */
+    sampler_set_rate(1000000);
+
+    /* Make sure the master pins are released before arming DMA. */
+    i2c_master_init();
+
+    dma_capture_start(capture_buffer, CAPTURE_SAMPLES);
+
+    /* Generate the known transaction while DMA is already running. */
+    if(!i2c_start())
+    {
+        uart_print("SELF-TEST ERROR: I2C START failed\r\n");
+        while(!dma_capture_done()) { }
+        return 0;
+    }
+
+    (void)i2c_write_byte_raw(0x50 << 1);
+    (void)i2c_write_byte_raw(0x12);
+    (void)i2c_write_byte_raw(0x34);
+    (void)i2c_write_byte_raw(0x56);
+    i2c_stop();
+
+    while(!dma_capture_done()) { }
+
+    uart_print("DMA capture complete\r\n");
+    uart_print("Passive decode: CH0=SDA CH1=SCL\r\n");
+
+    prev = (uint8_t)(capture_buffer[0] & 0x03);
+
+    for(i = 1; i < CAPTURE_SAMPLES; i++)
+    {
+        uint8_t curr = (uint8_t)(capture_buffer[i] & 0x03);
+        uint8_t prev_sda = prev & 0x01;
+        uint8_t curr_sda = curr & 0x01;
+        uint8_t prev_scl = (prev >> 1) & 0x01;
+        uint8_t curr_scl = (curr >> 1) & 0x01;
+
+        /* START: SDA falls while SCL is high. */
+        if(prev_sda && !curr_sda && prev_scl && curr_scl)
+        {
+            starts++;
+            in_frame = 1;
+            bit_count = 0;
+            shift = 0;
+            first_byte = 1;
+            uart_print("START @ ");
+            uart_print_uint(i);
+            uart_print("\r\n");
+        }
+
+        /* STOP: SDA rises while SCL is high. */
+        if(!prev_sda && curr_sda && prev_scl && curr_scl)
+        {
+            if(in_frame)
+            {
+                stops++;
+                uart_print("STOP @ ");
+                uart_print_uint(i);
+                uart_print("\r\n");
+            }
+            in_frame = 0;
+            bit_count = 0;
+            shift = 0;
+            first_byte = 1;
+        }
+
+        /* Sample SDA on every rising SCL edge. */
+        if(!prev_scl && curr_scl && in_frame)
+        {
+            if(bit_count < 8)
+            {
+                shift = (uint8_t)((shift << 1) | curr_sda);
+                bit_count++;
+            }
+            else
+            {
+                uint8_t byte_value = shift;
+
+                if(first_byte)
+                {
+                    uart_print("ADDR 0x");
+                    uart_print_hex8((uint8_t)(byte_value >> 1));
+                    uart_print((byte_value & 1) ? " R " : " W ");
+                }
+                else
+                {
+                    uart_print("DATA 0x");
+                    uart_print_hex8(byte_value);
+                    uart_print(" ");
+                }
+
+                if(curr_sda)
+                {
+                    nacks++;
+                    uart_print("NACK\r\n");
+                }
+                else
+                {
+                    acks++;
+                    uart_print("ACK\r\n");
+                }
+
+                bytes++;
+                first_byte = 0;
+                bit_count = 0;
+                shift = 0;
+            }
+        }
+
+        prev = curr;
+    }
+
+    uart_print("\r\nI2C SELF-TEST SUMMARY\r\n");
+    uart_print("STARTs : "); uart_print_uint(starts); uart_print("\r\n");
+    uart_print("STOPs  : "); uart_print_uint(stops); uart_print("\r\n");
+    uart_print("Bytes  : "); uart_print_uint(bytes); uart_print("\r\n");
+    uart_print("ACKs   : "); uart_print_uint(acks); uart_print("\r\n");
+    uart_print("NACKs  : "); uart_print_uint(nacks); uart_print("\r\n");
+
+    return (starts > 0 && stops > 0 && bytes >= 4) ? 1 : 0;
 }
 
 void i2c_master_set_delay(uint32_t d)

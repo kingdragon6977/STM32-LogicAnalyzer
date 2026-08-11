@@ -270,6 +270,50 @@ int i2c_master_write_byte(uint8_t addr7, uint8_t reg, uint8_t value)
     return 1;
 }
 
+/*
+ * Generate known I2C traffic for analyzer loopback testing.
+ *
+ * With PC9 connected to PA0 and PC12 connected to PA1, capture raw data
+ * should show a START, address 0x50, register 0x12, data 0x34, data 0x56,
+ * followed by STOP. There is deliberately no slave at 0x50, so the address
+ * and data bytes will normally be NACKed; the electrical waveform is still
+ * valid and is ideal for validating the passive decoder.
+ */
+int i2c_master_test_transaction(void)
+{
+    uint8_t ack_addr;
+    uint8_t ack_reg;
+    uint8_t ack_data1;
+    uint8_t ack_data2;
+
+    uart_print("I2C loopback test: START 0x50 12 34 56 STOP\r\n");
+
+    if(!i2c_start())
+    {
+        uart_print("I2C test failed: START/SCL\r\n");
+        return 0;
+    }
+
+    ack_addr = i2c_write_byte_raw(0x50 << 1);
+    ack_reg  = i2c_write_byte_raw(0x12);
+    ack_data1 = i2c_write_byte_raw(0x34);
+    ack_data2 = i2c_write_byte_raw(0x56);
+
+    i2c_stop();
+
+    uart_print("ACKs: addr=");
+    uart_print_uint(ack_addr);
+    uart_print(" reg=");
+    uart_print_uint(ack_reg);
+    uart_print(" data1=");
+    uart_print_uint(ack_data1);
+    uart_print(" data2=");
+    uart_print_uint(ack_data2);
+    uart_print("\r\n");
+
+    return 1;
+}
+
 void i2c_master_set_delay(uint32_t d)
 {
     if(d < 10)

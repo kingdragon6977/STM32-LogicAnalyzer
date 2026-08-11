@@ -126,30 +126,142 @@ static void decode_edges(void)
     uart_print("CH3 edges: "); uart_print_uint(edge_count[3]); uart_print("\r\n");
 }
 
+/*
+ * Passive I2C decoder.
+ *
+ * Analyzer wiring:
+ *   CH0 = SDA
+ *   CH1 = SCL
+ *
+ * The decoder never drives either bus line. It reconstructs I2C from the
+ * captured samples by looking at START/STOP conditions and SCL rising edges.
+ * SDA is sampled on each SCL rising edge, as required by I2C.
+ *
+ * Output example:
+ *   START @ 123
+ *   ADDR 0x50 W ACK
+ *   DATA 0x12 ACK
+ *   DATA 0x34 NACK
+ *   STOP @ 456
+ *
+ * This is intentionally a passive decoder for observing the SA-SD35 bus.
+ */
 static void decode_i2c(void)
 {
     uint32_t i;
-    uart_print("\r\nI2C framing\r\n");
+    uint32_t starts = 0;
+    uint32_t stops = 0;
+    uint32_t bytes = 0;
+    uint32_t acks = 0;
+    uint32_t nacks = 0;
+    uint8_t in_frame = 0;
+    uint8_t bit_count = 0;
+    uint8_t shift = 0;
+    uint8_t first_byte = 1;
+    uint8_t byte_value = 0;
+    uint8_t prev = buffer[0];
+
+    uart_print("\r\nI2C PASSIVE DECODE\r\n");
     uart_print("CH0=SDA CH1=SCL\r\n");
-    for(i=1;i<CAPTURE_SAMPLES;i++)
+
+    for(i = 1; i < CAPTURE_SAMPLES; i++)
     {
-        uint8_t prev = buffer[i-1];
         uint8_t curr = buffer[i];
-        uint8_t scl_high = ((prev & 0x02) && (curr & 0x02));
-        uint8_t sda_old = prev & 0x01;
-        uint8_t sda_new = curr & 0x01;
-        if(scl_high)
+        uint8_t prev_scl = (prev >> 1) & 1;
+        uint8_t curr_scl = (curr >> 1) & 1;
+        uint8_t prev_sda = prev & 1;
+        uint8_t curr_sda = curr & 1;
+
+        /* START: SDA falls while SCL is high. */
+        if(prev_sda && !curr_sda && prev_scl && curr_scl)
         {
-            if(sda_old && !sda_new)
+            starts++;
+            in_frame = 1;
+            bit_count = 0;
+            shift = 0;
+            first_byte = 1;
+
+            uart_print("START @ ");
+            uart_print_uint(i);
+            uart_print("\r\n");
+        }
+
+        /* STOP: SDA rises while SCL is high. */
+        if(!prev_sda && curr_sda && prev_scl && curr_scl)
+        {
+            if(in_frame)
             {
-                uart_print("START @ "); uart_print_uint(i); uart_print("\r\n");
+                stops++;
+                uart_print("STOP @ ");
+                uart_print_uint(i);
+                uart_print("\r\n");
             }
-            if(!sda_old && sda_new)
+
+            in_frame = 0;
+            bit_count = 0;
+            shift = 0;
+            first_byte = 1;
+        }
+
+        /* I2C data is valid at the rising edge of SCL. */
+        if(!prev_scl && curr_scl && in_frame)
+        {
+            uint8_t sda = curr_sda;
+
+            if(bit_count < 8)
             {
-                uart_print("STOP @ "); uart_print_uint(i); uart_print("\r\n");
+                shift = (uint8_t)((shift << 1) | sda);
+                bit_count++;
+            }
+            else
+            {
+                /* Ninth clock is ACK/NACK. ACK is SDA low. */
+                byte_value = shift;
+
+                if(first_byte)
+                {
+                    uint8_t address = (uint8_t)(byte_value >> 1);
+                    uint8_t read = byte_value & 1;
+
+                    uart_print("ADDR 0x");
+                    uart_print_hex8(address);
+                    uart_print(read ? " R " : " W ");
+                }
+                else
+                {
+                    uart_print("DATA 0x");
+                    uart_print_hex8(byte_value);
+                    uart_print(" ");
+                }
+
+                if(!sda)
+                {
+                    acks++;
+                    uart_print("ACK");
+                }
+                else
+                {
+                    nacks++;
+                    uart_print("NACK");
+                }
+
+                uart_print("\r\n");
+                bytes++;
+                first_byte = 0;
+                bit_count = 0;
+                shift = 0;
             }
         }
+
+        prev = curr;
     }
+
+    uart_print("\r\nI2C SUMMARY\r\n");
+    uart_print("STARTs : "); uart_print_uint(starts); uart_print("\r\n");
+    uart_print("STOPs  : "); uart_print_uint(stops); uart_print("\r\n");
+    uart_print("Bytes  : "); uart_print_uint(bytes); uart_print("\r\n");
+    uart_print("ACKs   : "); uart_print_uint(acks); uart_print("\r\n");
+    uart_print("NACKs  : "); uart_print_uint(nacks); uart_print("\r\n");
 }
 
 static void raw_stats(void)

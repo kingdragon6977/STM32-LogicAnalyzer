@@ -21,6 +21,14 @@ int i2c_master_write_byte(uint8_t addr7, uint8_t reg, uint8_t value);
 /* Generate a known-good I2C transaction for analyzer loopback testing. */
 int i2c_master_test_transaction(void);
 
+/*
+ * Synchronized I2C/analyzer self-test.
+ *
+ * Starts DMA capture on PA0-PA3, generates the known transaction on PC9/PC12,
+ * waits for DMA completion, then decodes PA0=SDA and PA1=SCL.
+ */
+int i2c_master_capture_test(void);
+
 /* Adjust the conservative bit-bang delay. Larger values = slower bus. */
 void i2c_master_set_delay(uint32_t d);
 

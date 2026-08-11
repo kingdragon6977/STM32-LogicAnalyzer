@@ -7,184 +7,164 @@
 #include <string.h>
 #include <stdint.h>
 
-
 static char cmd[64];
-
 static uint8_t cmd_index = 0;
-
-
 
 static void process_command(void)
 {
     cmd[cmd_index] = 0;
 
-
     uart_print("\r\n");
 
-
-    /*
-     * HELP
-     */
-
+    /* HELP */
     if(strcmp(cmd,"help")==0)
     {
         uart_print("Commands:\r\n");
-
         uart_print(" help\r\n");
-
         uart_print(" capture\r\n");
-
         uart_print(" capture raw\r\n");
-
         uart_print(" mode edge\r\n");
-
         uart_print(" mode i2c\r\n");
-        	
         uart_print(" rate 1k\r\n");
-        	
         uart_print(" rate 100k\r\n");
-
         uart_print(" rate 500k\r\n");
-
         uart_print(" rate 1m\r\n");
-
         uart_print(" rate 2m\r\n");
-
         uart_print(" i2c scan\r\n");
-
+        uart_print(" i2c test\r\n");
         uart_print(" trigger ch0 rising\r\n");
-
         uart_print(" trigger ch0 falling\r\n");
-        	
+        uart_print(" trigger ch1 rising\r\n");
+        uart_print(" trigger ch1 falling\r\n");
+        uart_print(" trigger ch2 rising\r\n");
+        uart_print(" trigger ch2 falling\r\n");
+        uart_print(" trigger ch3 rising\r\n");
+        uart_print(" trigger ch3 falling\r\n");
         uart_print(" test on\r\n");
-        	
         uart_print(" test off\r\n");
-        	
         uart_print(" test 1k\r\n");
-        	
         uart_print(" test 10k\r\n");
-        	
         uart_print(" test 100k\r\n");
-        	
         uart_print(" test 500k\r\n");
-        	
         uart_print(" backend dma\r\n");
-        
         uart_print(" backend irq\r\n");
-        
         uart_print(" status\r\n");
     }
 
-
-
-    /*
-     * CAPTURE
-     */
-
+    /* CAPTURE */
     else if(strcmp(cmd,"capture")==0)
     {
         capture_run();
     }
 
-
-
-    /*
-     * RAW
-     */
-
+    /* RAW */
     else if(strcmp(cmd,"capture raw")==0)
     {
         capture_raw();
     }
 
-
+    /* I2C */
     else if(strcmp(cmd,"i2c scan")==0)
     {
-        /* simple I2C bus scan using bit-banged master on CH0/CH1 */
         i2c_master_init();
         i2c_master_scan();
     }
 
+    else if(strcmp(cmd,"i2c test")==0)
+    {
+        i2c_master_init();
+        i2c_master_test_transaction();
+    }
 
-    /*
-     * MODES
-     */
-
+    /* MODES */
     else if(strcmp(cmd,"mode edge")==0)
     {
         capture_set_mode(MODE_EDGE);
-
         uart_print("Mode: EDGE\r\n");
     }
-
 
     else if(strcmp(cmd,"mode i2c")==0)
     {
         capture_set_mode(MODE_I2C);
-
         uart_print("Mode: I2C\r\n");
     }
 
-
-
-    /*
-     * SAMPLE RATES
-     */
-    	
+    /* SAMPLE RATES */
     else if(strcmp(cmd,"rate 1k")==0)
     {
         capture_set_rate_enum(RATE_1K);
     }
-    	
-    	
+
     else if(strcmp(cmd,"rate 100k")==0)
     {
         capture_set_rate_enum(RATE_100K);
     }
-
 
     else if(strcmp(cmd,"rate 500k")==0)
     {
         capture_set_rate_enum(RATE_500K);
     }
 
-
     else if(strcmp(cmd,"rate 1m")==0)
     {
         capture_set_rate_enum(RATE_1M);
     }
-
 
     else if(strcmp(cmd,"rate 2m")==0)
     {
         capture_set_rate_enum(RATE_2M);
     }
 
-
-
-    /*
-     * TRIGGERS
-     */
-
+    /* TRIGGERS */
     else if(strcmp(cmd,"trigger ch0 rising")==0)
     {
         capture_set_trigger(0,1);
-
         uart_print("Trigger CH0 rising\r\n");
     }
-
 
     else if(strcmp(cmd,"trigger ch0 falling")==0)
     {
         capture_set_trigger(0,0);
-
         uart_print("Trigger CH0 falling\r\n");
     }
 
+    else if(strcmp(cmd,"trigger ch1 rising")==0)
+    {
+        capture_set_trigger(1,1);
+        uart_print("Trigger CH1 rising\r\n");
+    }
 
-    /*
-     * BACKEND
-     */
+    else if(strcmp(cmd,"trigger ch1 falling")==0)
+    {
+        capture_set_trigger(1,0);
+        uart_print("Trigger CH1 falling\r\n");
+    }
+
+    else if(strcmp(cmd,"trigger ch2 rising")==0)
+    {
+        capture_set_trigger(2,1);
+        uart_print("Trigger CH2 rising\r\n");
+    }
+
+    else if(strcmp(cmd,"trigger ch2 falling")==0)
+    {
+        capture_set_trigger(2,0);
+        uart_print("Trigger CH2 falling\r\n");
+    }
+
+    else if(strcmp(cmd,"trigger ch3 rising")==0)
+    {
+        capture_set_trigger(3,1);
+        uart_print("Trigger CH3 rising\r\n");
+    }
+
+    else if(strcmp(cmd,"trigger ch3 falling")==0)
+    {
+        capture_set_trigger(3,0);
+        uart_print("Trigger CH3 falling\r\n");
+    }
+
+    /* BACKEND */
     else if(strcmp(cmd,"backend dma")==0)
     {
         capture_set_backend_dma(1);
@@ -197,17 +177,11 @@ static void process_command(void)
         uart_print("Capture backend: IRQ\r\n");
     }
 
-
-    /*
-     * STATUS
-     */
-
+    /* STATUS */
     else if(strcmp(cmd,"status")==0)
     {
         uart_print("Analyzer status\r\n");
-
         uart_print("----------------\r\n");
-
         uart_print("Mode: ");
 
         if(capture_get_mode()==MODE_I2C)
@@ -215,78 +189,56 @@ static void process_command(void)
         else
             uart_print("EDGE\r\n");
 
-
         uart_print("Rate: ");
-
-        uart_print_uint(
-            capture_get_rate()
-        );
-
+        uart_print_uint(capture_get_rate());
         uart_print(" Hz\r\n");
     }
 
-        else if(strcmp(cmd,"test on")==0)
+    /* TEST SIGNAL */
+    else if(strcmp(cmd,"test on")==0)
     {
         test_signal_enable();
-
         uart_print("Test output enabled\r\n");
     }
-
 
     else if(strcmp(cmd,"test off")==0)
     {
         test_signal_disable();
-
         uart_print("Test output disabled\r\n");
     }
-
 
     else if(strcmp(cmd,"test 1k")==0)
     {
         test_signal_set_rate(1000);
-
         uart_print("Test frequency: 1000 Hz\r\n");
     }
-
 
     else if(strcmp(cmd,"test 10k")==0)
     {
         test_signal_set_rate(10000);
-
         uart_print("Test frequency: 10000 Hz\r\n");
     }
-
 
     else if(strcmp(cmd,"test 100k")==0)
     {
         test_signal_set_rate(100000);
-
         uart_print("Test frequency: 100000 Hz\r\n");
     }
-
 
     else if(strcmp(cmd,"test 500k")==0)
     {
         test_signal_set_rate(500000);
-
         uart_print("Test frequency: 500000 Hz\r\n");
     }
-
 
     else
     {
         uart_print("Unknown command\r\n");
     }
 
-
-
     uart_print("> ");
-
     cmd_index = 0;
 }
-
-
-
 
 void cli_task(void)
 {
@@ -294,21 +246,16 @@ void cli_task(void)
     {
         char c = uart_getc();
 
-
-
         if(c=='\r' || c=='\n')
         {
             if(cmd_index)
                 process_command();
         }
-
-
         else
         {
             if(cmd_index < sizeof(cmd)-1)
             {
                 cmd[cmd_index++] = c;
-
                 uart_putc(c);
             }
         }

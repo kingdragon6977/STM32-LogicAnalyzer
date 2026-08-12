@@ -37,4 +37,12 @@ void i2c_master_pin_diagnostic(void);
 void i2c_master_release_pins(void);
 void i2c_master_drive_pins(void);
 
+/*
+ * PA8 alternate-SDA electrical test.
+ * PA8 is deliberately kept separate from the normal PC9/PC12 I2C master.
+ * The test configures PA8 as open-drain and releases it so an external meter
+ * can be used to see whether the same abnormal voltage decay follows the pin.
+ */
+void i2c_master_alt_sda_test(void);
+
 #endif

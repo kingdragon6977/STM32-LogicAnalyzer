@@ -32,4 +32,9 @@ int i2c_master_capture_test(void);
 /* Adjust the conservative bit-bang delay. Larger values = slower bus. */
 void i2c_master_set_delay(uint32_t d);
 
+/* GPIO electrical diagnostics. */
+void i2c_master_pin_diagnostic(void);
+void i2c_master_release_pins(void);
+void i2c_master_drive_pins(void);
+
 #endif

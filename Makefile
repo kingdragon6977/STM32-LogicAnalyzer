@@ -37,6 +37,7 @@ src/gpio.c \
 src/cli.c \
 src/capture.c \
 src/i2c_master.c \
+src/i2c_diag.c \
 src/dma_capture.c \
 system_stm32f10x.c \
 STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.c \

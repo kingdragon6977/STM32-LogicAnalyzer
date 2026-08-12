@@ -447,3 +447,52 @@ void i2c_master_set_delay(uint32_t d)
 
     i2c_delay_count = d;
 }
+
+/*
+ * PA8 alternate-SDA electrical isolation test.
+ *
+ * This intentionally does NOT use PA8 as part of the I2C transaction yet.
+ * It configures PA8 as open-drain, drives it low briefly, then releases it.
+ * The released pin is left completely untouched so a DMM can watch its
+ * voltage. This makes the PA8 measurement directly comparable to the PC9
+ * measurement that showed the 3.2 V -> ~1 V decay.
+ */
+void i2c_master_alt_sda_test(void)
+{
+    GPIO_InitTypeDef gpio;
+    uint32_t i;
+
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+
+    gpio.GPIO_Pin = I2C_ALT_SDA_PIN;
+    gpio.GPIO_Mode = GPIO_Mode_Out_OD;
+    gpio.GPIO_Speed = GPIO_Speed_2MHz;
+    GPIO_Init(I2C_ALT_SDA_PORT, &gpio);
+
+    uart_print("\r\nI2C ALT SDA TEST\r\n");
+    uart_print("PA8 configured OPEN-DRAIN\r\n");
+    uart_print("PA8 will drive LOW, then RELEASE\r\n");
+
+    I2C_ALT_SDA_PORT->BRR = I2C_ALT_SDA_PIN;
+    for(i = 0; i < 100000; i++)
+        __asm volatile("nop");
+
+    uart_print("PA8 LOW: IDR=");
+    uart_print_uint((I2C_ALT_SDA_PORT->IDR & I2C_ALT_SDA_PIN) ? 1 : 0);
+    uart_print("\r\n");
+
+    /* Release exactly once and leave PA8 alone for the meter measurement. */
+    I2C_ALT_SDA_PORT->BSRR = I2C_ALT_SDA_PIN;
+
+    uart_print("PA8 RELEASED (high-Z)\r\n");
+    uart_print("PA8 IDR=");
+    uart_print_uint((I2C_ALT_SDA_PORT->IDR & I2C_ALT_SDA_PIN) ? 1 : 0);
+    uart_print("\r\n");
+    uart_print("GPIOA CRH=0x");
+    uart_print_hex8((uint8_t)(I2C_ALT_SDA_PORT->CRH >> 24));
+    uart_print_hex8((uint8_t)(I2C_ALT_SDA_PORT->CRH >> 16));
+    uart_print_hex8((uint8_t)(I2C_ALT_SDA_PORT->CRH >> 8));
+    uart_print_hex8((uint8_t)I2C_ALT_SDA_PORT->CRH);
+    uart_print("\r\n");
+    uart_print("Measure PA8 now; firmware will not touch it again.\r\n");
+}

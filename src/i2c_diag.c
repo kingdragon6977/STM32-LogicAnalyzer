@@ -81,7 +81,7 @@ void i2c_master_pin_diagnostic(void)
     uart_print("\r\n");
 
     uart_print("GPIOC CRH=0x");
-    print_hex16((uint16_t)(I2C_PORT->CRH >> 16));
+    print_hex16((uint16_t)I2C_PORT->CRH);
     uart_print("\r\n");
 
     uart_print("IDR=0x");

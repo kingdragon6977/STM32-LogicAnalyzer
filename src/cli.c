@@ -31,6 +31,9 @@ static void process_command(void)
         uart_print(" i2c scan\r\n");
         uart_print(" i2c test\r\n");
         uart_print(" i2c capture-test\r\n");
+        uart_print(" i2c pins\r\n");
+        uart_print(" i2c release\r\n");
+        uart_print(" i2c drive\r\n");
         uart_print(" trigger ch0 rising\r\n");
         uart_print(" trigger ch0 falling\r\n");
         uart_print(" trigger ch1 rising\r\n");
@@ -70,6 +73,18 @@ static void process_command(void)
     else if(strcmp(cmd,"i2c capture-test")==0)
     {
         i2c_master_capture_test();
+    }
+    else if(strcmp(cmd,"i2c pins")==0)
+    {
+        i2c_master_pin_diagnostic();
+    }
+    else if(strcmp(cmd,"i2c release")==0)
+    {
+        i2c_master_release_pins();
+    }
+    else if(strcmp(cmd,"i2c drive")==0)
+    {
+        i2c_master_drive_pins();
     }
     else if(strcmp(cmd,"mode edge")==0)
     {

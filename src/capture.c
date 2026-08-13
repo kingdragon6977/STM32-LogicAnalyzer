@@ -115,20 +115,23 @@ static void decode_edges(void)
     uart_print("CH3 edges: "); uart_print_uint(edge_count[3]); uart_print("\r\n");
 }
 
-/* Passive I2C decoder: CH0=SDA, CH1=SCL. Never drives the monitored bus. */
+/* Passive I2C decoder: CH0=TS_SDA, CH1=TS_SCL, CH2=TS_INT/HI.
+ * The analyzer never drives these monitored signals. */
 static void decode_i2c(void)
 {
     uint32_t i;
     uint32_t starts=0, stops=0, bytes=0, acks=0, nacks=0;
+    uint32_t ts_int_rises=0, ts_int_falls=0;
     uint8_t in_frame=0, bit_count=0, shift=0, first_byte=1;
     uint8_t prev=buffer[0];
 
     uart_print("\r\nI2C PASSIVE DECODE\r\n");
-    uart_print("CH0=SDA CH1=SCL\r\n");
+    uart_print("CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI\r\n");
+    uart_print("Bus: TOUCH PAD (TAS5534 audio I2C is separate)\r\n");
 
-    /* The passive command triggers on SDA falling at START, so that edge is
-       consumed by the trigger wait. Begin decoding at the following SCL edge. */
-    if(mode == MODE_I2C)
+    /* Trigger is normally CH0 SDA falling. Do not blindly assume it was an
+       I2C START: verify SDA fell while SCL was high in the captured samples. */
+    if(mode == MODE_I2C && (prev & 0x03) == 0x02)
     {
         in_frame=1;
         starts=1;
@@ -140,6 +143,16 @@ static void decode_i2c(void)
         uint8_t curr=buffer[i];
         uint8_t prev_scl=(prev>>1)&1, curr_scl=(curr>>1)&1;
         uint8_t prev_sda=prev&1, curr_sda=curr&1;
+        uint8_t prev_int=(prev>>2)&1, curr_int=(curr>>2)&1;
+
+        if(prev_int != curr_int)
+        {
+            if(curr_int) ts_int_rises++; else ts_int_falls++;
+            uart_print("TS_INT ");
+            uart_print(curr_int ? "HIGH @ " : "LOW @ ");
+            uart_print_uint(i);
+            uart_print("\r\n");
+        }
 
         if(prev_sda && !curr_sda && prev_scl && curr_scl)
         {
@@ -192,6 +205,8 @@ static void decode_i2c(void)
     uart_print("Bytes  : "); uart_print_uint(bytes); uart_print("\r\n");
     uart_print("ACKs   : "); uart_print_uint(acks); uart_print("\r\n");
     uart_print("NACKs  : "); uart_print_uint(nacks); uart_print("\r\n");
+    uart_print("TS_INT rising : "); uart_print_uint(ts_int_rises); uart_print("\r\n");
+    uart_print("TS_INT falling: "); uart_print_uint(ts_int_falls); uart_print("\r\n");
 }
 
 static void raw_stats(void)

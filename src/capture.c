@@ -19,19 +19,12 @@ static volatile uint8_t backend_use_dma = 1;
 static void normalize_samples(void)
 {
     uint32_t i;
-    for(i = 0; i < CAPTURE_SAMPLES; i++)
-        buffer[i] &= 0x0F;
+    for(i = 0; i < CAPTURE_SAMPLES; i++) buffer[i] &= 0x0F;
 }
 
-void capture_init(void)
-{
-    capture_set_trigger(0,1);
-    dma_capture_init();
-}
-
+void capture_init(void) { capture_set_trigger(0,1); dma_capture_init(); }
 void capture_set_mode(analyzer_mode_t new_mode) { mode = new_mode; }
 analyzer_mode_t capture_get_mode(void) { return mode; }
-
 void capture_set_rate(uint32_t hz) { if(hz) sample_rate = hz; }
 uint32_t capture_get_rate(void) { return sample_rate; }
 
@@ -39,11 +32,11 @@ void capture_set_rate_enum(capture_rate_t rate)
 {
     switch(rate)
     {
-        case RATE_1K:    capture_set_rate(1000); break;
-        case RATE_100K:  capture_set_rate(100000); break;
-        case RATE_500K:  capture_set_rate(500000); break;
-        case RATE_1M:    capture_set_rate(1000000); break;
-        case RATE_2M:    capture_set_rate(2000000); break;
+        case RATE_1K: capture_set_rate(1000); break;
+        case RATE_100K: capture_set_rate(100000); break;
+        case RATE_500K: capture_set_rate(500000); break;
+        case RATE_1M: capture_set_rate(1000000); break;
+        case RATE_2M: capture_set_rate(2000000); break;
     }
     uart_print("Sample rate set.\r\n");
 }
@@ -61,7 +54,7 @@ static uint8_t wait_for_trigger(void)
 {
     uint8_t mask = (uint8_t)(1u << trigger_channel);
     uint8_t last = logic_read();
-    uint32_t timeout = 10000000;
+    uint32_t timeout = (mode == MODE_I2C) ? 0xFFFFFFFFu : 10000000u;
 
     uart_print("Waiting for trigger...\r\n");
     while(timeout--)
@@ -104,10 +97,8 @@ static void decode_edges(void)
         if(diff)
         {
             uart_print("S="); uart_print_uint(i); uart_print(" [");
-            uart_putc((buffer[i]&8)?'1':'0');
-            uart_putc((buffer[i]&4)?'1':'0');
-            uart_putc((buffer[i]&2)?'1':'0');
-            uart_putc((buffer[i]&1)?'1':'0');
+            uart_putc((buffer[i]&8)?'1':'0'); uart_putc((buffer[i]&4)?'1':'0');
+            uart_putc((buffer[i]&2)?'1':'0'); uart_putc((buffer[i]&1)?'1':'0');
             uart_print("] ");
             if(diff&1) uart_print((buffer[i]&1)?"CH0↑ ":"CH0↓ ");
             if(diff&2) uart_print((buffer[i]&2)?"CH1↑ ":"CH1↓ ");
@@ -128,43 +119,31 @@ static void decode_edges(void)
 static void decode_i2c(void)
 {
     uint32_t i;
-    uint32_t starts = 0, stops = 0, bytes = 0, acks = 0, nacks = 0;
-    uint8_t in_frame = 0;
-    uint8_t bit_count = 0;
-    uint8_t shift = 0;
-    uint8_t first_byte = 1;
-    uint8_t prev = buffer[0];
+    uint32_t starts=0, stops=0, bytes=0, acks=0, nacks=0;
+    uint8_t in_frame=0, bit_count=0, shift=0, first_byte=1;
+    uint8_t prev=buffer[0];
 
     uart_print("\r\nI2C PASSIVE DECODE\r\n");
     uart_print("CH0=SDA CH1=SCL\r\n");
 
-    /*
-     * Normal captures see START. The dedicated passive command deliberately
-     * triggers on SDA falling at START, so the START edge itself is consumed
-     * by the trigger wait. In that case begin the decoder in-frame.
-     */
+    /* The passive command triggers on SDA falling at START, so that edge is
+       consumed by the trigger wait. Begin decoding at the following SCL edge. */
     if(mode == MODE_I2C)
     {
-        in_frame = 1;
-        starts = 1;
+        in_frame=1;
+        starts=1;
         uart_print("START @ trigger\r\n");
     }
 
-    for(i = 1; i < CAPTURE_SAMPLES; i++)
+    for(i=1;i<CAPTURE_SAMPLES;i++)
     {
-        uint8_t curr = buffer[i];
-        uint8_t prev_scl = (prev >> 1) & 1;
-        uint8_t curr_scl = (curr >> 1) & 1;
-        uint8_t prev_sda = prev & 1;
-        uint8_t curr_sda = curr & 1;
+        uint8_t curr=buffer[i];
+        uint8_t prev_scl=(prev>>1)&1, curr_scl=(curr>>1)&1;
+        uint8_t prev_sda=prev&1, curr_sda=curr&1;
 
         if(prev_sda && !curr_sda && prev_scl && curr_scl)
         {
-            starts++;
-            in_frame = 1;
-            bit_count = 0;
-            shift = 0;
-            first_byte = 1;
+            starts++; in_frame=1; bit_count=0; shift=0; first_byte=1;
             uart_print("START @ "); uart_print_uint(i); uart_print("\r\n");
         }
 
@@ -175,53 +154,36 @@ static void decode_i2c(void)
                 stops++;
                 uart_print("STOP @ "); uart_print_uint(i); uart_print("\r\n");
             }
-            in_frame = 0;
-            bit_count = 0;
-            shift = 0;
-            first_byte = 1;
+            in_frame=0; bit_count=0; shift=0; first_byte=1;
         }
 
         if(!prev_scl && curr_scl && in_frame)
         {
-            if(bit_count < 8)
+            if(bit_count<8)
             {
-                shift = (uint8_t)((shift << 1) | curr_sda);
+                shift=(uint8_t)((shift<<1)|curr_sda);
                 bit_count++;
             }
             else
             {
-                uint8_t byte_value = shift;
+                uint8_t byte_value=shift;
                 if(first_byte)
                 {
                     uart_print("ADDR 0x");
-                    uart_print_hex8((uint8_t)(byte_value >> 1));
-                    uart_print((byte_value & 1) ? " R " : " W ");
+                    uart_print_hex8((uint8_t)(byte_value>>1));
+                    uart_print((byte_value&1)?" R ":" W ");
                 }
                 else
                 {
-                    uart_print("DATA 0x");
-                    uart_print_hex8(byte_value);
-                    uart_print(" ");
+                    uart_print("DATA 0x"); uart_print_hex8(byte_value); uart_print(" ");
                 }
-
-                if(!curr_sda)
-                {
-                    acks++;
-                    uart_print("ACK");
-                }
-                else
-                {
-                    nacks++;
-                    uart_print("NACK");
-                }
+                if(!curr_sda) { acks++; uart_print("ACK"); }
+                else { nacks++; uart_print("NACK"); }
                 uart_print("\r\n");
-                bytes++;
-                first_byte = 0;
-                bit_count = 0;
-                shift = 0;
+                bytes++; first_byte=0; bit_count=0; shift=0;
             }
         }
-        prev = curr;
+        prev=curr;
     }
 
     uart_print("\r\nI2C SUMMARY\r\n");
@@ -234,12 +196,8 @@ static void decode_i2c(void)
 
 static void raw_stats(void)
 {
-    uint32_t i, edges = 0;
-    uint8_t last = buffer[0];
-    for(i=1;i<CAPTURE_SAMPLES;i++)
-    {
-        if(buffer[i] != last) { edges++; last = buffer[i]; }
-    }
+    uint32_t i,edges=0; uint8_t last=buffer[0];
+    for(i=1;i<CAPTURE_SAMPLES;i++) if(buffer[i]!=last){edges++;last=buffer[i];}
     uart_print("Transitions: "); uart_print_uint(edges); uart_print("\r\n");
 }
 
@@ -253,25 +211,20 @@ void capture_raw(void)
     if(backend_use_dma)
     {
         uart_print("Hardware DMA sampler running...\r\n");
-        sampler_set_rate(sample_rate);
-        dma_capture_start(buffer, CAPTURE_SAMPLES);
+        sampler_set_rate(sample_rate); dma_capture_start(buffer,CAPTURE_SAMPLES);
         while(!dma_capture_done()) { }
         uart_print("DMA sampling complete\r\n");
     }
     else
     {
         uart_print("Hardware IRQ sampler running...\r\n");
-        sampler_set_rate(sample_rate);
-        sampler_start(buffer, CAPTURE_SAMPLES);
+        sampler_set_rate(sample_rate); sampler_start(buffer,CAPTURE_SAMPLES);
         while(!sampler_done()) { }
         uart_print("IRQ sampling complete\r\n");
     }
 
     normalize_samples();
-    if(mode == MODE_I2C)
-        decode_i2c();
-    else
-        raw_stats();
+    if(mode==MODE_I2C) decode_i2c(); else raw_stats();
     uart_print("\r\nRAW_DONE\r\n");
 }
 
@@ -293,16 +246,14 @@ void capture_run(void)
     if(backend_use_dma)
     {
         uart_print("Hardware DMA sampler running...\r\n");
-        sampler_set_rate(sample_rate);
-        dma_capture_start(buffer, CAPTURE_SAMPLES);
+        sampler_set_rate(sample_rate); dma_capture_start(buffer,CAPTURE_SAMPLES);
         while(!dma_capture_done()) cli_task();
         uart_print("DMA sampling complete\r\n");
     }
     else
     {
         uart_print("Hardware IRQ sampler running...\r\n");
-        sampler_set_rate(sample_rate);
-        sampler_start(buffer, CAPTURE_SAMPLES);
+        sampler_set_rate(sample_rate); sampler_start(buffer,CAPTURE_SAMPLES);
         while(!sampler_done()) cli_task();
         uart_print("IRQ sampling complete\r\n");
     }

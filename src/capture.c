@@ -32,7 +32,7 @@ void capture_init(void)
 void capture_set_mode(analyzer_mode_t new_mode) { mode = new_mode; }
 analyzer_mode_t capture_get_mode(void) { return mode; }
 
-void capture_set_rate(uint32_t hz) { sample_rate = hz; }
+void capture_set_rate(uint32_t hz) { if(hz) sample_rate = hz; }
 uint32_t capture_get_rate(void) { return sample_rate; }
 
 void capture_set_rate_enum(capture_rate_t rate)
@@ -59,7 +59,7 @@ uint8_t capture_get_backend_dma(void) { return backend_use_dma; }
 
 static uint8_t wait_for_trigger(void)
 {
-    uint8_t mask = 1 << trigger_channel;
+    uint8_t mask = (uint8_t)(1u << trigger_channel);
     uint8_t last = logic_read();
     uint32_t timeout = 10000000;
 
@@ -93,7 +93,6 @@ static void decode_edges(void)
 {
     uint32_t i;
     uint8_t last = buffer[0];
-
     uart_print("\r\nEdges Found:\r\n");
     for(i=1;i<CAPTURE_SAMPLES;i++)
     {
@@ -118,7 +117,6 @@ static void decode_edges(void)
         }
         last = buffer[i];
     }
-
     uart_print("\r\nSummary\r\n");
     uart_print("CH0 edges: "); uart_print_uint(edge_count[0]); uart_print("\r\n");
     uart_print("CH1 edges: "); uart_print_uint(edge_count[1]); uart_print("\r\n");
@@ -126,43 +124,31 @@ static void decode_edges(void)
     uart_print("CH3 edges: "); uart_print_uint(edge_count[3]); uart_print("\r\n");
 }
 
-/*
- * Passive I2C decoder.
- *
- * Analyzer wiring:
- *   CH0 = SDA
- *   CH1 = SCL
- *
- * The decoder never drives either bus line. It reconstructs I2C from the
- * captured samples by looking at START/STOP conditions and SCL rising edges.
- * SDA is sampled on each SCL rising edge, as required by I2C.
- *
- * Output example:
- *   START @ 123
- *   ADDR 0x50 W ACK
- *   DATA 0x12 ACK
- *   DATA 0x34 NACK
- *   STOP @ 456
- *
- * This is intentionally a passive decoder for observing the SA-SD35 bus.
- */
+/* Passive I2C decoder: CH0=SDA, CH1=SCL. Never drives the monitored bus. */
 static void decode_i2c(void)
 {
     uint32_t i;
-    uint32_t starts = 0;
-    uint32_t stops = 0;
-    uint32_t bytes = 0;
-    uint32_t acks = 0;
-    uint32_t nacks = 0;
+    uint32_t starts = 0, stops = 0, bytes = 0, acks = 0, nacks = 0;
     uint8_t in_frame = 0;
     uint8_t bit_count = 0;
     uint8_t shift = 0;
     uint8_t first_byte = 1;
-    uint8_t byte_value = 0;
     uint8_t prev = buffer[0];
 
     uart_print("\r\nI2C PASSIVE DECODE\r\n");
     uart_print("CH0=SDA CH1=SCL\r\n");
+
+    /*
+     * Normal captures see START. The dedicated passive command deliberately
+     * triggers on SDA falling at START, so the START edge itself is consumed
+     * by the trigger wait. In that case begin the decoder in-frame.
+     */
+    if(mode == MODE_I2C)
+    {
+        in_frame = 1;
+        starts = 1;
+        uart_print("START @ trigger\r\n");
+    }
 
     for(i = 1; i < CAPTURE_SAMPLES; i++)
     {
@@ -172,7 +158,6 @@ static void decode_i2c(void)
         uint8_t prev_sda = prev & 1;
         uint8_t curr_sda = curr & 1;
 
-        /* START: SDA falls while SCL is high. */
         if(prev_sda && !curr_sda && prev_scl && curr_scl)
         {
             starts++;
@@ -180,52 +165,37 @@ static void decode_i2c(void)
             bit_count = 0;
             shift = 0;
             first_byte = 1;
-
-            uart_print("START @ ");
-            uart_print_uint(i);
-            uart_print("\r\n");
+            uart_print("START @ "); uart_print_uint(i); uart_print("\r\n");
         }
 
-        /* STOP: SDA rises while SCL is high. */
         if(!prev_sda && curr_sda && prev_scl && curr_scl)
         {
             if(in_frame)
             {
                 stops++;
-                uart_print("STOP @ ");
-                uart_print_uint(i);
-                uart_print("\r\n");
+                uart_print("STOP @ "); uart_print_uint(i); uart_print("\r\n");
             }
-
             in_frame = 0;
             bit_count = 0;
             shift = 0;
             first_byte = 1;
         }
 
-        /* I2C data is valid at the rising edge of SCL. */
         if(!prev_scl && curr_scl && in_frame)
         {
-            uint8_t sda = curr_sda;
-
             if(bit_count < 8)
             {
-                shift = (uint8_t)((shift << 1) | sda);
+                shift = (uint8_t)((shift << 1) | curr_sda);
                 bit_count++;
             }
             else
             {
-                /* Ninth clock is ACK/NACK. ACK is SDA low. */
-                byte_value = shift;
-
+                uint8_t byte_value = shift;
                 if(first_byte)
                 {
-                    uint8_t address = (uint8_t)(byte_value >> 1);
-                    uint8_t read = byte_value & 1;
-
                     uart_print("ADDR 0x");
-                    uart_print_hex8(address);
-                    uart_print(read ? " R " : " W ");
+                    uart_print_hex8((uint8_t)(byte_value >> 1));
+                    uart_print((byte_value & 1) ? " R " : " W ");
                 }
                 else
                 {
@@ -234,7 +204,7 @@ static void decode_i2c(void)
                     uart_print(" ");
                 }
 
-                if(!sda)
+                if(!curr_sda)
                 {
                     acks++;
                     uart_print("ACK");
@@ -244,7 +214,6 @@ static void decode_i2c(void)
                     nacks++;
                     uart_print("NACK");
                 }
-
                 uart_print("\r\n");
                 bytes++;
                 first_byte = 0;
@@ -252,7 +221,6 @@ static void decode_i2c(void)
                 shift = 0;
             }
         }
-
         prev = curr;
     }
 
@@ -266,88 +234,13 @@ static void decode_i2c(void)
 
 static void raw_stats(void)
 {
-    uint32_t i;
-    uint32_t edges = 0;
+    uint32_t i, edges = 0;
     uint8_t last = buffer[0];
     for(i=1;i<CAPTURE_SAMPLES;i++)
     {
-        if(buffer[i] != last)
-        {
-            edges++;
-            last = buffer[i];
-        }
+        if(buffer[i] != last) { edges++; last = buffer[i]; }
     }
     uart_print("Transitions: "); uart_print_uint(edges); uart_print("\r\n");
-}
-
-/* Print a compact transition diagnostic instead of dumping all 8192 samples. */
-static void raw_transition_report(void)
-{
-    uint32_t i;
-    uint32_t transitions = 0;
-    uint32_t first = 0;
-    uint32_t min_gap = 0xFFFFFFFF;
-    uint32_t max_gap = 0;
-    uint32_t last_transition = 0;
-    uint8_t last = buffer[0];
-
-    uart_print("\r\nTransition report\r\n");
-    uart_print("First transitions (max 32):\r\n");
-
-    for(i=1; i<CAPTURE_SAMPLES; i++)
-    {
-        if(buffer[i] != last)
-        {
-            uint32_t gap = i - last_transition;
-            transitions++;
-
-            if(transitions == 1)
-            {
-                first = i;
-                last_transition = i;
-            }
-            else
-            {
-                if(gap < min_gap) min_gap = gap;
-                if(gap > max_gap) max_gap = gap;
-                last_transition = i;
-            }
-
-            if(transitions <= 32)
-            {
-                uart_print("S=");
-                uart_print_uint(i);
-                uart_print(" ");
-                uart_print_hex8(last);
-                uart_print(" -> ");
-                uart_print_hex8(buffer[i]);
-                uart_print(" ");
-
-                if((last & 1) == 0 && (buffer[i] & 1)) uart_print("CH0↑");
-                else if((last & 1) && !(buffer[i] & 1)) uart_print("CH0↓");
-                else if((last & 2) == 0 && (buffer[i] & 2)) uart_print("CH1↑");
-                else if((last & 2) && !(buffer[i] & 2)) uart_print("CH1↓");
-                else if((last & 4) == 0 && (buffer[i] & 4)) uart_print("CH2↑");
-                else if((last & 4) && !(buffer[i] & 4)) uart_print("CH2↓");
-                else if((last & 8) == 0 && (buffer[i] & 8)) uart_print("CH3↑");
-                else if((last & 8) && !(buffer[i] & 8)) uart_print("CH3↓");
-                else uart_print("multiple");
-
-                uart_print("\r\n");
-            }
-            last = buffer[i];
-        }
-    }
-
-    uart_print("\r\nTransition summary\r\n");
-    uart_print("Total : "); uart_print_uint(transitions); uart_print("\r\n");
-    uart_print("First : "); uart_print_uint(first); uart_print(" samples\r\n");
-
-    if(transitions > 2)
-    {
-        uart_print("Min gap: "); uart_print_uint(min_gap); uart_print(" samples\r\n");
-        uart_print("Max gap: "); uart_print_uint(max_gap); uart_print(" samples\r\n");
-    }
 }
 
 void capture_raw(void)
@@ -375,19 +268,10 @@ void capture_raw(void)
     }
 
     normalize_samples();
-    raw_stats();
-    raw_transition_report();
-
-    uart_print("\r\nFirst 128 samples:\r\n");
-    {
-        uint32_t i;
-        for(i=0; i<128 && i<CAPTURE_SAMPLES; i++)
-        {
-            uart_print_hex8(buffer[i]);
-            uart_putc(((i & 0x0F) == 0x0F) ? '\n' : ' ');
-        }
-    }
-
+    if(mode == MODE_I2C)
+        decode_i2c();
+    else
+        raw_stats();
     uart_print("\r\nRAW_DONE\r\n");
 }
 
@@ -425,7 +309,7 @@ void capture_run(void)
 
     normalize_samples();
     if(mode==MODE_EDGE) decode_edges();
-    if(mode==MODE_I2C) decode_i2c();
+    else if(mode==MODE_I2C) decode_i2c();
     raw_stats();
     uart_print("\r\nDONE\r\n");
 }

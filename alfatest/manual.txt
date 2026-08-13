@@ -1,0 +1,265 @@
+2019/02/13 01:27:25 (GMT+09:00)
+        HT-S350/SD35                                                                                                                                                                                                                                                                                                                                                                                                                         Sony CONFIDENTIAL
+                                                                                                                                                                                                                                                                                                                                                                                                                                             For Authorized Servicer
+
+
+
+
+        4-9.   SCHEMATIC DIAGRAM - MAIN Board (7/9) -
+
+                         1                                                                   2                                                        3                                 4                                         5                                                                 6                                                    7                                                                 8
+
+                     MAIN BOARD (7/9)
+         A         +3V3_STB                                  +3V3_LED
+                                                                                                   LED                                                                                                    +5V_LED                  +5V_STB
+                                                                                                                                                                                                                                                                                                                                      Touch IC
+                             R1051 1                                2 0R3J-0-U-GP                                                                     CN5                                                                                              +3V3_STB
+                                                                                                                                                 10           9
+                                                                                                                                                                                                                                                                                                                                                   CN6
+                          C1045    1                                          2 DUMMY-R2-GP                                                       1
+                                                                                                                                                                                                           R1052 1                  2 0R3J-0-U-GP                                                                                              7                   8
+                                       DNP                                                                                                                    2                                                                                                                                                                                1
+                                                                                                       6                                          3                                                                               C1046 1                                      2 DUMMY-R2-GP
+                         USB_LED
+                                                                                                                                                              4      6,10                                                                                                                                                                                          2
+                                                                                                                                                                                                           IR
+
+
+
+
+                                                                                                                                                                                                           1
+                                                                                                       6                                          5                                                                                            DNP                                                                                    6        3
+                         BT_LED                                                                                                                                                                                                               TS_SCL
+                                                                                                                                                              6                                                     C1044                                                                                                                                      64
+         B                                                                                                                                                                                                                                                                                                                                                                                                              TS_INT
+
+
+
+
+                                                                                                                                                                                                      1
+                                                                                                       6                                          7                                             C1043                                                                                                                                 6        5
+                         TV_LED                                                                                                                                                                                                               TS_SDA
+                                                                                                                                                              8                                                                                                                                                                                                    6           C340
+
+
+
+
+                                                                                                                                                                                    SC1KP50V2KX-1GP
+
+
+
+
+                                                                                                                                                                                                                    DUMMY-R2-GP
+                                                         1
+
+
+                                                                              1
+
+
+                                                                                                   1
+
+
+
+
+                                                                                                                                                 12           11                                                                                                                                                                               9                   10
+
+
+
+
+                                                                                                                                                                                                                                                                                                                                                                               GRM1555C1H5R6CA01-GP
+                                                                                                                                                                                                      2
+                                       C315                  C314                 C313                                                                                                                                                                                  C338                            C339
+
+
+
+
+                                                                                                                                                                                                                                                        GRM1555C1H5R6CA01-GP
+
+
+
+
+                                                                                                                                                                                                                                                                                                               GRM1555C1H5R6CA01-GP
+                                                                                                                                                                                                           2
+
+
+
+
+                                                                                                                                                                                                                                                                                                                                                                                             1
+                                                                                                                                                      ETY-CONN8A-GP-U2
+                                        SCD1U25V2KX-GP
+
+
+                                                             SCD1U25V2KX-GP
+
+
+                                                                                  SCD1U25V2KX-GP
+
+
+
+
+                                                                                                                                                                                                                                                                                                                                                   ETY-CONN6A-5-GP
+                                                         2
+
+
+                                                                              2
+
+
+                                                                                                   2
+
+
+
+
+                                                                                                                                                                                                                                                                                 1
+
+
+                                                                                                                                                                                                                                                                                                    1
+                                                                                                                                                                                                               20181023
+                                                                                                                                                                                                           DNP 1. ADD EMI Solution
+
+
+
+
+                                                                                                                                                                                                                                                                                                                                                                                             2
+                                                                                                                                                                                                                                                                                 2
+
+
+                                                                                                                                                                                                                                                                                                    2
+                                                                                                                                                                                                                                   +3V3_STB                                                                            ETY-CONN6A-5-GP
+                                                                                                                                                                                                                                                                                                                                                   IR_TX                                                                   +5V_STB
+         C                                                                                                                                                                                                                                                                                                                                10                   9
+                                                                                                                                                                                                                                                 POLYSW-D5A6V-1-GP                                                                         6                              POLYSW-D5A6V-1-GP
+                   CN1
+                                                                                                                                                                                                                                                        F2                                                                                                     5                 F1
+                           1                                                                                                       +24V                                                                                                              1          2                                                                          4                                  1          2
+                                                                                                                                                                                                                                                                                                                                                               3
+                           2                                                                                                                                                                                                                                                                                                   6           2
+                                                                                                                                                                                                                                            IR_TX_EN
+                           3
+                           4                                                                                                                                                                                                                                                                                                                                   1        6,10
+                                                                                                                                                                                                                20181018                                                                                                                                                                                                         IR
+                                                                                                   1
+
+
+
+
+                                                                                                                         1
+
+
+
+
+                                                                                                                                                                                                                                                                                 1
+                           5                                                                                                                                                                                                                                                   C1041                                                       8                   7
+                           6                                                                               C36                     C37                                                                          1. Modify CN7 Pin1 define
+
+
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                    1
+                           7                                                                                                                                                                                                                                                                                                                                                                                  C1042
+
+
+
+
+                                                                                                                                                                                                                                                                                  SC1KP50V2KX-1GP
+                                                                                                                                                                                                                                                                                                                                                     CN7
+                                                                                                   2
+
+
+
+
+                                                                                                                         2
+
+
+
+
+                                                                                                                                                                                                                                                                                 2
+         D                 8
+
+
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                  SC1KP50V2KX-1GP
+                                                                                                           DUMMY-R2-GP
+
+
+
+
+                                                                                                                                   DUMMY-R2-GP
+
+
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                    2
+                   ACES-CON8-S1-GP                                                                                                                                                                                                                                                                        C1041/C1042 Close to CN7
+
+
+                                                                                                   DNP                   DNP                                                                                                                                                                                                                                                                                            SPR4
+                                                                                                                                                                                                                                                                                                                                                                                                                    1
+                                       +24V                                                                              +24V
+                                                                                                                           4,5,6
+                                                                                                                                                                                                                                                                                                                                                                                                                        DUMMY_SPRING-63-GP
+                                       +3V3_STB                                                                          +3V3_STB
+                                                                                                                           4,5,6,8,11,12
+                                                                                                                                                                                                                                                                                                                                                                                                                        SPR3
+                                                                                                                                                                                                                                                                                                                                                                                                                    1
+         E                             +5V_STB                                                                           +5V_STB
+                                                                                                                           4,5,11
+                                                                                                                                                                                                                                                                                                                                                                                                                        DUMMY_SPRING-63-GP
+                                                                                                                                                                            H1                             H2                           H3                                                   H4
+                                                                               USB_LED                     1                                     TPAD40-GP                  HOLE394R158-GP                 HOLE394R158-GP               HOLE394R158-GP                                       HOLE394R158-GP                                        SH1                                                                  SPR2
+                                                                               BT_LED                                        TP142
+                                                                                                           1                                     TPAD40-GP                                                                                                                                                                                                 1                                                        1
+                                                                               TV_LED                                        TP143
+                                                                                                           1                                     TPAD40-GP
+                                                                                                                             TP144
+                                                                               IR                          1                                     TPAD40-GP                                                                                                                                                                                 STF256R168H83-GP                                                             DUMMY_SPRING-63-GP
+                                                                               TS_SCL                                        TP145
+                                                                                                           1                                     TPAD40-GP                                                                                                                                                                                      SH2
+                                                                               TS_SDA                                        TP146
+                                                                                                           1                                     TPAD40-GP                                                                                                                                                                                            1                                                                 SPR1
+                                                                                                                             TP147
+                                                                                                                                                                              1
+
+
+
+
+                                                                                                                                                                                                                1
+
+
+
+
+                                                                                                                                                                                                                                             1
+
+
+
+
+                                                                                                                                                                                                                                                                                                    1
+
+
+                                                                               TS_INT                      1                                     TPAD40-GP                                                                                                                                                                                                                                                          1
+                                                                               IR_TX_EN                                      TP148
+                                                                                                           1                                     TPAD40-GP                                                                                                                                                                                 STF256R168H83-GP
+                                                                                                                             TP149
+                                                                                                                                                                                                                                                                                                                                                                                                                        DUMMY_SPRING-63-GP
+         F                        +3V3_STB                                                                 1                 TP150
+                                                                                                                                  TPAD60-OG-GP
+                                                                                                           1                 TP151
+                                   +5V_STB                                                                                        TPAD60-OG-GP
+                                                                                                           1                 TP152                                            H5
+                                                 +24V                                                      1                 TP160TPAD60-OG-GP                                HOLE394R158-GP
+                                                 +24V                                                      1                 TP161TPAD60-OG-GP
+                                                 +24V                                                                             TPAD60-OG-GP
+                                                                                                           1                 TP153 TPAD60-OG-GP
+                                                                                                           1                 TP178 TPAD60-OG-GP
+                                                                                                           1                 TP179 TPAD60-OG-GP
+         G
+                                                                                                                                                                                1
+
+
+
+
+    Full version of document at EasyManua.ls                                                                                                                                                                                                                                                                                                                                                                                                   HT-S350/SD35
+       34
+    www.easymanua.ls/sony/sa-sd35/manual
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                       SYS SET
+

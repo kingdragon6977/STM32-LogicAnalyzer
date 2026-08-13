@@ -1,0 +1,2347 @@
+mode i2c
+Mode: I2C
+> rate 1m
+Sample rate set.
+> trigger ch0 falling
+Trigger CH0 falling
+> Continuous capture: START (press button to stop)
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 1257
+ADDR 0x37 W NACK
+START @ 3016
+ADDR 0x37 W NACK
+START @ 4773
+ADDR 0x37 W NACK
+START @ 6531
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 5
+STOPs  : 0
+Bytes  : 4
+ACKs   : 0
+NACKs  : 4
+Transitions: 105
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 1288
+ADDR 0x37 W NACK
+START @ 3042
+ADDR 0x37 W NACK
+START @ 4795
+ADDR 0x37 W NACK
+START @ 6544
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 5
+STOPs  : 0
+Bytes  : 4
+ACKs   : 0
+NACKs  : 4
+Transitions: 105
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 1245
+ADDR 0x37 W NACK
+START @ 3004
+ADDR 0x37 W NACK
+START @ 4762
+ADDR 0x37 W NACK
+START @ 6520
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 5
+STOPs  : 0
+Bytes  : 4
+ACKs   : 0
+NACKs  : 4
+Transitions: 105
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 647
+ADDR 0x37 W NACK
+START @ 2244
+ADDR 0x37 W NACK
+START @ 3840
+ADDR 0x37 W NACK
+START @ 5436
+ADDR 0x37 W NACK
+START @ 7033
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 23
+ADDR 0x37 W NACK
+START @ 1620
+ADDR 0x37 W NACK
+START @ 3216
+ADDR 0x37 W NACK
+START @ 4812
+ADDR 0x37 W NACK
+START @ 6409
+ADDR 0x37 W NACK
+START @ 8005
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 7
+STOPs  : 0
+Bytes  : 6
+ACKs   : 0
+NACKs  : 6
+Transitions: 155
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 645
+ADDR 0x37 W NACK
+START @ 2242
+ADDR 0x37 W NACK
+START @ 3838
+ADDR 0x37 W NACK
+START @ 5434
+ADDR 0x37 W NACK
+START @ 7031
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 647
+ADDR 0x37 W NACK
+START @ 2244
+ADDR 0x37 W NACK
+START @ 3840
+ADDR 0x37 W NACK
+START @ 5436
+ADDR 0x37 W NACK
+START @ 7033
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 646
+ADDR 0x37 W NACK
+START @ 2242
+ADDR 0x37 W NACK
+START @ 3839
+ADDR 0x37 W NACK
+START @ 5435
+ADDR 0x37 W NACK
+START @ 7031
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 647
+ADDR 0x37 W NACK
+START @ 2243
+ADDR 0x37 W NACK
+START @ 3839
+ADDR 0x37 W NACK
+START @ 5436
+ADDR 0x37 W NACK
+START @ 7032
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 646
+ADDR 0x37 W NACK
+START @ 2242
+ADDR 0x37 W NACK
+START @ 3838
+ADDR 0x37 W NACK
+START @ 5435
+ADDR 0x37 W NACK
+START @ 7031
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 645
+ADDR 0x37 W NACK
+START @ 2242
+ADDR 0x37 W NACK
+START @ 3838
+ADDR 0x37 W NACK
+START @ 5434
+ADDR 0x37 W NACK
+START @ 7031
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 643
+ADDR 0x37 W NACK
+START @ 2239
+ADDR 0x37 W NACK
+START @ 3836
+ADDR 0x37 W NACK
+START @ 5432
+ADDR 0x37 W NACK
+START @ 7028
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 646
+ADDR 0x37 W NACK
+START @ 2242
+ADDR 0x37 W NACK
+START @ 3839
+ADDR 0x37 W NACK
+START @ 5435
+ADDR 0x37 W NACK
+START @ 7031
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 644
+ADDR 0x37 W NACK
+START @ 2240
+ADDR 0x37 W NACK
+START @ 3837
+ADDR 0x37 W NACK
+START @ 5433
+ADDR 0x37 W NACK
+START @ 7029
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 646
+ADDR 0x37 W NACK
+START @ 2242
+ADDR 0x37 W NACK
+START @ 3839
+ADDR 0x37 W NACK
+START @ 5435
+ADDR 0x37 W NACK
+START @ 7031
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 644
+ADDR 0x37 W NACK
+START @ 2240
+ADDR 0x37 W NACK
+START @ 3836
+ADDR 0x37 W NACK
+START @ 5433
+ADDR 0x37 W NACK
+START @ 7029
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 648
+ADDR 0x37 W NACK
+START @ 2244
+ADDR 0x37 W NACK
+START @ 3841
+ADDR 0x37 W NACK
+START @ 5437
+ADDR 0x37 W NACK
+START @ 7033
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 646
+ADDR 0x37 W NACK
+START @ 2242
+ADDR 0x37 W NACK
+START @ 3838
+ADDR 0x37 W NACK
+START @ 5435
+ADDR 0x37 W NACK
+START @ 7031
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 650
+ADDR 0x37 W NACK
+START @ 2246
+ADDR 0x37 W NACK
+START @ 3842
+ADDR 0x37 W NACK
+START @ 5439
+ADDR 0x37 W NACK
+START @ 7035
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 648
+ADDR 0x37 W NACK
+START @ 2244
+ADDR 0x37 W NACK
+START @ 3840
+ADDR 0x37 W NACK
+START @ 5437
+ADDR 0x37 W NACK
+START @ 7033
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 647
+ADDR 0x37 W NACK
+START @ 2244
+ADDR 0x37 W NACK
+START @ 3840
+ADDR 0x37 W NACK
+START @ 5436
+ADDR 0x37 W NACK
+START @ 7032
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 645
+ADDR 0x37 W NACK
+START @ 2242
+ADDR 0x37 W NACK
+START @ 3838
+ADDR 0x37 W NACK
+START @ 5434
+ADDR 0x37 W NACK
+START @ 7031
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 648
+ADDR 0x37 W NACK
+START @ 2245
+ADDR 0x37 W NACK
+START @ 3841
+ADDR 0x37 W NACK
+START @ 5437
+ADDR 0x37 W NACK
+START @ 7034
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 646
+ADDR 0x37 W NACK
+START @ 2243
+ADDR 0x37 W NACK
+START @ 3839
+ADDR 0x37 W NACK
+START @ 5435
+ADDR 0x37 W NACK
+START @ 7032
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 646
+ADDR 0x37 W NACK
+START @ 2242
+ADDR 0x37 W NACK
+START @ 3838
+ADDR 0x37 W NACK
+START @ 5435
+ADDR 0x37 W NACK
+START @ 7031
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 644
+ADDR 0x37 W NACK
+START @ 2240
+ADDR 0x37 W NACK
+START @ 3836
+ADDR 0x37 W NACK
+START @ 5433
+ADDR 0x37 W NACK
+START @ 7029
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 647
+ADDR 0x37 W NACK
+START @ 2243
+ADDR 0x37 W NACK
+START @ 3839
+ADDR 0x37 W NACK
+START @ 5436
+ADDR 0x37 W NACK
+START @ 7032
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 127
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 645
+ADDR 0x37 W NACK
+START @ 2241
+ADDR 0x37 W NACK
+START @ 3837
+ADDR 0x37 W NACK
+START @ 5434
+ADDR 0x37 W NACK
+START @ 7030
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 128
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 646
+ADDR 0x37 W NACK
+START @ 2243
+ADDR 0x37 W NACK
+START @ 3839
+ADDR 0x37 W NACK
+START @ 5435
+ADDR 0x37 W NACK
+START @ 7031
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 644
+ADDR 0x37 W NACK
+START @ 2241
+ADDR 0x37 W NACK
+START @ 3837
+ADDR 0x37 W NACK
+START @ 5433
+ADDR 0x37 W NACK
+START @ 7030
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 128
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 645
+ADDR 0x37 W NACK
+START @ 2241
+ADDR 0x37 W NACK
+START @ 3837
+ADDR 0x37 W NACK
+START @ 5434
+ADDR 0x37 W NACK
+START @ 7030
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 652
+ADDR 0x37 W NACK
+START @ 2248
+ADDR 0x37 W NACK
+START @ 3844
+ADDR 0x37 W NACK
+START @ 5441
+ADDR 0x37 W NACK
+START @ 7037
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 129
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 652
+ADDR 0x37 W NACK
+START @ 2248
+ADDR 0x37 W NACK
+START @ 3844
+ADDR 0x37 W NACK
+START @ 5441
+ADDR 0x37 W NACK
+START @ 7037
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 125
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 650
+ADDR 0x37 W NACK
+START @ 2246
+ADDR 0x37 W NACK
+START @ 3843
+ADDR 0x37 W NACK
+START @ 5439
+ADDR 0x37 W NACK
+START @ 7035
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 125
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 644
+ADDR 0x37 W NACK
+START @ 2241
+ADDR 0x37 W NACK
+START @ 3837
+ADDR 0x37 W NACK
+START @ 5433
+ADDR 0x37 W NACK
+START @ 7029
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 651
+ADDR 0x37 W NACK
+START @ 2247
+ADDR 0x37 W NACK
+START @ 3844
+ADDR 0x37 W NACK
+START @ 5440
+ADDR 0x37 W NACK
+START @ 7036
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 126
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 652
+ADDR 0x37 W NACK
+START @ 2248
+ADDR 0x37 W NACK
+START @ 3844
+ADDR 0x37 W NACK
+START @ 5441
+ADDR 0x37 W NACK
+START @ 7037
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 650
+ADDR 0x37 W NACK
+START @ 2246
+ADDR 0x37 W NACK
+START @ 3842
+ADDR 0x37 W NACK
+START @ 5439
+ADDR 0x37 W NACK
+START @ 7035
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 644
+ADDR 0x37 W NACK
+START @ 2240
+ADDR 0x37 W NACK
+START @ 3836
+ADDR 0x37 W NACK
+START @ 5433
+ADDR 0x37 W NACK
+START @ 7029
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 651
+ADDR 0x37 W NACK
+START @ 2247
+ADDR 0x37 W NACK
+START @ 3843
+ADDR 0x37 W NACK
+START @ 5439
+ADDR 0x37 W NACK
+START @ 7036
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 644
+ADDR 0x37 W NACK
+START @ 2241
+ADDR 0x37 W NACK
+START @ 3837
+ADDR 0x37 W NACK
+START @ 5433
+ADDR 0x37 W NACK
+START @ 7029
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 651
+ADDR 0x37 W NACK
+START @ 2247
+ADDR 0x37 W NACK
+START @ 3844
+ADDR 0x37 W NACK
+START @ 5440
+ADDR 0x37 W NACK
+START @ 7036
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 644
+ADDR 0x37 W NACK
+START @ 2241
+ADDR 0x37 W NACK
+START @ 3837
+ADDR 0x37 W NACK
+START @ 5433
+ADDR 0x37 W NACK
+START @ 7030
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 651
+ADDR 0x37 W NACK
+START @ 2248
+ADDR 0x37 W NACK
+START @ 3844
+ADDR 0x37 W NACK
+START @ 5440
+ADDR 0x37 W NACK
+START @ 7037
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 650
+ADDR 0x37 W NACK
+START @ 2246
+ADDR 0x37 W NACK
+START @ 3842
+ADDR 0x37 W NACK
+START @ 5439
+ADDR 0x37 W NACK
+START @ 7035
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 648
+ADDR 0x37 W NACK
+START @ 2244
+ADDR 0x37 W NACK
+START @ 3840
+ADDR 0x37 W NACK
+START @ 5437
+ADDR 0x37 W NACK
+START @ 7033
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 649
+ADDR 0x37 W NACK
+START @ 2245
+ADDR 0x37 W NACK
+START @ 3841
+ADDR 0x37 W NACK
+START @ 5438
+ADDR 0x37 W NACK
+START @ 7034
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 647
+ADDR 0x37 W NACK
+START @ 2243
+ADDR 0x37 W NACK
+START @ 3839
+ADDR 0x37 W NACK
+START @ 5436
+ADDR 0x37 W NACK
+START @ 7032
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 648
+ADDR 0x37 W NACK
+START @ 2244
+ADDR 0x37 W NACK
+START @ 3840
+ADDR 0x37 W NACK
+START @ 5437
+ADDR 0x37 W NACK
+START @ 7033
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 646
+ADDR 0x37 W NACK
+START @ 2242
+ADDR 0x37 W NACK
+START @ 3838
+ADDR 0x37 W NACK
+START @ 5435
+ADDR 0x37 W NACK
+START @ 7031
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 645
+ADDR 0x37 W NACK
+START @ 2241
+ADDR 0x37 W NACK
+START @ 3837
+ADDR 0x37 W NACK
+START @ 5434
+ADDR 0x37 W NACK
+START @ 7030
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 652
+ADDR 0x37 W NACK
+START @ 2248
+ADDR 0x37 W NACK
+START @ 3844
+ADDR 0x37 W NACK
+START @ 5440
+ADDR 0x37 W NACK
+START @ 7037
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 645
+ADDR 0x37 W NACK
+START @ 2241
+ADDR 0x37 W NACK
+START @ 3838
+ADDR 0x37 W NACK
+START @ 5434
+ADDR 0x37 W NACK
+START @ 7030
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 643
+ADDR 0x37 W NACK
+START @ 2240
+ADDR 0x37 W NACK
+START @ 3836
+ADDR 0x37 W NACK
+START @ 5432
+ADDR 0x37 W NACK
+START @ 7029
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 648
+ADDR 0x37 W NACK
+START @ 2244
+ADDR 0x37 W NACK
+START @ 3840
+ADDR 0x37 W NACK
+START @ 5437
+ADDR 0x37 W NACK
+START @ 7033
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 646
+ADDR 0x37 W NACK
+START @ 2242
+ADDR 0x37 W NACK
+START @ 3838
+ADDR 0x37 W NACK
+START @ 5435
+ADDR 0x37 W NACK
+START @ 7031
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 649
+ADDR 0x37 W NACK
+START @ 2246
+ADDR 0x37 W NACK
+START @ 3842
+ADDR 0x37 W NACK
+START @ 5438
+ADDR 0x37 W NACK
+START @ 7034
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 647
+ADDR 0x37 W NACK
+START @ 2244
+ADDR 0x37 W NACK
+START @ 3840
+ADDR 0x37 W NACK
+START @ 5436
+ADDR 0x37 W NACK
+START @ 7033
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 649
+ADDR 0x37 W NACK
+START @ 2245
+ADDR 0x37 W NACK
+START @ 3841
+ADDR 0x37 W NACK
+START @ 5438
+ADDR 0x37 W NACK
+START @ 7034
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 647
+ADDR 0x37 W NACK
+START @ 2243
+ADDR 0x37 W NACK
+START @ 3840
+ADDR 0x37 W NACK
+START @ 5436
+ADDR 0x37 W NACK
+START @ 7032
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 648
+ADDR 0x37 W NACK
+START @ 2245
+ADDR 0x37 W NACK
+START @ 3841
+ADDR 0x37 W NACK
+START @ 5437
+ADDR 0x37 W NACK
+START @ 7034
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 647
+ADDR 0x37 W NACK
+START @ 2243
+ADDR 0x37 W NACK
+START @ 3839
+ADDR 0x37 W NACK
+START @ 5436
+ADDR 0x37 W NACK
+START @ 7032
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 647
+ADDR 0x37 W NACK
+START @ 2244
+ADDR 0x37 W NACK
+START @ 3840
+ADDR 0x37 W NACK
+START @ 5436
+ADDR 0x37 W NACK
+START @ 7033
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 646
+ADDR 0x37 W NACK
+START @ 2242
+ADDR 0x37 W NACK
+START @ 3838
+ADDR 0x37 W NACK
+START @ 5434
+ADDR 0x37 W NACK
+START @ 7031
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=SDA CH1=SCL
+START @ trigger
+START @ 647
+ADDR 0x37 W NACK
+START @ 2243
+ADDR 0x37 W NACK
+START @ 3840
+ADDR 0x37 W NACK
+START @ 5436
+ADDR 0x37 W NACK
+START @ 7032
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+Transitions: 130
+
+DONE
+Continuous capture: STOPPED
+
+CTRL-A Z for help | 115200 8N1 | NOR | Minicom 2.9 | VT102 | Offline | ttyUSB0                                 
+

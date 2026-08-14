@@ -115,26 +115,34 @@ static void decode_edges(void)
     uart_print("CH3 edges: "); uart_print_uint(edge_count[3]); uart_print("\r\n");
 }
 
-/* Passive I2C decoder: CH0=TS_SDA, CH1=TS_SCL, CH2=TS_INT/HI.
- * The analyzer never drives these monitored signals. */
+/* Passive I2C decoder for the touch-pad bus.
+ * CH0=TS_SDA, CH1=TS_SCL, CH2=TS_INT/HI.
+ * CH2 is treated as an auxiliary interrupt signal: count its edges but do
+ * not dump every transition, because touch controllers can chatter rapidly.
+ */
 static void decode_i2c(void)
 {
     uint32_t i;
     uint32_t starts=0, stops=0, bytes=0, acks=0, nacks=0;
     uint32_t ts_int_rises=0, ts_int_falls=0;
+    uint32_t ts_int_first=0, ts_int_last=0;
     uint8_t in_frame=0, bit_count=0, shift=0, first_byte=1;
     uint8_t prev=buffer[0];
+    uint8_t have_first_int=0;
 
     uart_print("\r\nI2C PASSIVE DECODE\r\n");
     uart_print("CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI\r\n");
     uart_print("Bus: TOUCH PAD (TAS5534 audio I2C is separate)\r\n");
 
-    /* Trigger is normally CH0 SDA falling. Do not blindly assume it was an
-       I2C START: verify SDA fell while SCL was high in the captured samples. */
-    if(mode == MODE_I2C && (prev & 0x03) == 0x02)
+    /* If the trigger was an SDA falling edge, verify that SCL is high in the
+       first captured sample. Otherwise the trigger was not an I2C START. */
+    if((prev & 0x03) == 0x02)
     {
         in_frame=1;
         starts=1;
+        bit_count=0;
+        shift=0;
+        first_byte=1;
         uart_print("START @ trigger\r\n");
     }
 
@@ -147,19 +155,27 @@ static void decode_i2c(void)
 
         if(prev_int != curr_int)
         {
-            if(curr_int) ts_int_rises++; else ts_int_falls++;
-            uart_print("TS_INT ");
-            uart_print(curr_int ? "HIGH @ " : "LOW @ ");
-            uart_print_uint(i);
-            uart_print("\r\n");
+            if(curr_int)
+            {
+                ts_int_rises++;
+                if(!have_first_int) { ts_int_first=i; have_first_int=1; }
+            }
+            else ts_int_falls++;
+            ts_int_last=i;
         }
 
+        /* START: SDA falling while SCL is high. */
         if(prev_sda && !curr_sda && prev_scl && curr_scl)
         {
-            starts++; in_frame=1; bit_count=0; shift=0; first_byte=1;
+            starts++;
+            in_frame=1;
+            bit_count=0;
+            shift=0;
+            first_byte=1;
             uart_print("START @ "); uart_print_uint(i); uart_print("\r\n");
         }
 
+        /* STOP: SDA rising while SCL is high. */
         if(!prev_sda && curr_sda && prev_scl && curr_scl)
         {
             if(in_frame)
@@ -167,12 +183,17 @@ static void decode_i2c(void)
                 stops++;
                 uart_print("STOP @ "); uart_print_uint(i); uart_print("\r\n");
             }
-            in_frame=0; bit_count=0; shift=0; first_byte=1;
+            in_frame=0;
+            bit_count=0;
+            shift=0;
+            first_byte=1;
         }
 
+        /* Sample data on SCL rising edges. I2C bytes are 8 data bits followed
+           by a ninth ACK/NACK bit. */
         if(!prev_scl && curr_scl && in_frame)
         {
-            if(bit_count<8)
+            if(bit_count < 8)
             {
                 shift=(uint8_t)((shift<<1)|curr_sda);
                 bit_count++;
@@ -188,12 +209,19 @@ static void decode_i2c(void)
                 }
                 else
                 {
-                    uart_print("DATA 0x"); uart_print_hex8(byte_value); uart_print(" ");
+                    uart_print("DATA 0x");
+                    uart_print_hex8(byte_value);
+                    uart_print(" ");
                 }
+
                 if(!curr_sda) { acks++; uart_print("ACK"); }
                 else { nacks++; uart_print("NACK"); }
                 uart_print("\r\n");
-                bytes++; first_byte=0; bit_count=0; shift=0;
+
+                bytes++;
+                first_byte=0;
+                bit_count=0;
+                shift=0;
             }
         }
         prev=curr;
@@ -207,6 +235,11 @@ static void decode_i2c(void)
     uart_print("NACKs  : "); uart_print_uint(nacks); uart_print("\r\n");
     uart_print("TS_INT rising : "); uart_print_uint(ts_int_rises); uart_print("\r\n");
     uart_print("TS_INT falling: "); uart_print_uint(ts_int_falls); uart_print("\r\n");
+    if(have_first_int)
+    {
+        uart_print("TS_INT first edge: "); uart_print_uint(ts_int_first); uart_print("\r\n");
+        uart_print("TS_INT last edge : "); uart_print_uint(ts_int_last); uart_print("\r\n");
+    }
 }
 
 static void raw_stats(void)

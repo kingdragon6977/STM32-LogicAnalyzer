@@ -32,6 +32,16 @@ uint8_t logic_read(void);
 void test_pin_toggle(void);
 
 /*
+ * Hardware I2C START trigger
+ *
+ * Uses EXTI0 on CH0/PA0 (TS_SDA), with the ISR accepting the edge only
+ * when CH1/PA1 (TS_SCL) is high. This is much more reliable than polling
+ * for a short SDA START edge at 1 MHz.
+ */
+void gpio_i2c_trigger_arm(void);
+uint8_t gpio_i2c_trigger_seen(void);
+
+/*
  * Button
  *
  * Returns 1 once per press

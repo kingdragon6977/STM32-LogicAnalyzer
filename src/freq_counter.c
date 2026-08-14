@@ -8,12 +8,13 @@
 /*
  * Frequency counter:
  *
- * TIM2 ETR is PA0/CH0 on STM32F103 with no TIM2 remap. PA0 is kept as a
- * normal floating input; the timer receives ETR from the pin in this mode.
+ * CH0 is PA0, which is TIM2 channel 1 with the normal (no-remap) mapping.
+ * Rather than using the ETR path, use TIM2 CH1 as the external clock source
+ * through TI1FP1. This gives us an explicit GPIO -> timer input path and lets
+ * the timer count rising edges directly.
  *
- * TIM2 counts external ETR edges. Its 16-bit counter is prescaled internally
- * by 1024 so an 8 MHz signal gives about 781 counts in 100 ms and a 36 MHz
- * signal about 3516 counts. Both are comfortably below 65535.
+ * TIM2's own prescaler divides the external edge stream by 1024. A 100 ms
+ * gate therefore gives about 781 counts for 8 MHz and about 3516 for 36 MHz.
  */
 #define FREQ_COUNTER_PRESCALER 1023u
 #define FREQ_GATE_MS            100u
@@ -38,7 +39,7 @@ static uint32_t timer_clock_hz(void)
     return (ppre >= 4u) ? (pclk1 * 2u) : pclk1;
 }
 
-static void pa0_prepare_for_etr(void)
+static void pa0_prepare_for_tim2_ch1(void)
 {
     GPIO_InitTypeDef gpio;
 
@@ -50,7 +51,7 @@ static void pa0_prepare_for_etr(void)
     gpio.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOA, &gpio);
 
-    /* TIM2 remap = 00: CH1/ETR = PA0. */
+    /* TIM2 remap = 00: CH1 = PA0. */
     AFIO->MAPR &= ~(0x3u << 8);
 }
 
@@ -73,13 +74,11 @@ void freq_counter_measure(void)
         freq_counter_init();
 
     uart_print("\r\nFREQUENCY COUNTER\r\n");
-    uart_print("Input: CH0 / PA0 (TIM2 ETR)\r\n");
+    uart_print("Input: CH0 / PA0 (TIM2 CH1)\r\n");
     uart_print("Gate: 100 ms\r\n");
-    uart_print("TIM2 ETR external-clock mode, input /1024\r\n");
+    uart_print("TIM2 CH1 external-clock mode, input /1024\r\n");
 
-    /* Explicitly restore PA0 as the timer input in case another test changed
-       the GPIO configuration. */
-    pa0_prepare_for_etr();
+    pa0_prepare_for_tim2_ch1();
 
     /* Stop normal sampling and its TIM2 update interrupt. */
     TIM_Cmd(TIM2, DISABLE);
@@ -96,11 +95,12 @@ void freq_counter_measure(void)
     tim.TIM_ClockDivision = TIM_CKD_DIV1;
     TIM_TimeBaseInit(TIM2, &tim);
 
-    /* ETR, non-inverted, no ETR prescaler, no digital filter. */
-    TIM_ETRClockMode2Config(TIM2,
-                            TIM_ExtTRGPSC_OFF,
-                            TIM_ExtTRGPolarity_NonInverted,
-                            0);
+    /* CH1 is the external clock input. Rising TI1FP1 edges clock TIM2. */
+    TIM_TIxExternalClockConfig(TIM2,
+                               TIM_TIxExternalCLK1Source_TI1,
+                               TIM_ICPolarity_Rising,
+                               0);
+
     TIM_SetCounter(TIM2, 0);
     TIM_ClearFlag(TIM2, TIM_FLAG_Update);
 

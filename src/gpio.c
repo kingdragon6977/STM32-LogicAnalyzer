@@ -5,6 +5,8 @@
 #include "misc.h"
 
 
+#define I2C_EXTI0 ((uint32_t)0x00000001u)
+
 static volatile uint8_t i2c_start_seen = 0;
 
 
@@ -36,15 +38,16 @@ void gpio_init(void)
      * Falling edges are enabled; the ISR verifies that PA1/SCL is high
      * before accepting the edge as a real I2C START condition.
      *
-     * Do this here rather than in the I2C decoder so the trigger is armed
-     * before the user starts interacting with the target board.
+     * Use the EXTI0 bit directly instead of EXTI_Line0.  The project does
+     * not include stm32f10x_exti.h, so the SPL EXTI_Line0 macro is not
+     * available here.
      */
     AFIO->EXTICR[0] &= ~(0x0Fu << 0); /* EXTI0 = PA0 */
-    EXTI->IMR &= ~EXTI_Line0;
-    EXTI->EMR &= ~EXTI_Line0;
-    EXTI->RTSR &= ~EXTI_Line0;
-    EXTI->FTSR |= EXTI_Line0;
-    EXTI->PR = EXTI_Line0;
+    EXTI->IMR &= ~I2C_EXTI0;
+    EXTI->EMR &= ~I2C_EXTI0;
+    EXTI->RTSR &= ~I2C_EXTI0;
+    EXTI->FTSR |= I2C_EXTI0;
+    EXTI->PR = I2C_EXTI0;
 
     {
         NVIC_InitTypeDef nvic;
@@ -81,8 +84,8 @@ uint8_t logic_read(void)
 void gpio_i2c_trigger_arm(void)
 {
     i2c_start_seen = 0;
-    EXTI->PR = EXTI_Line0;
-    EXTI->IMR |= EXTI_Line0;
+    EXTI->PR = I2C_EXTI0;
+    EXTI->IMR |= I2C_EXTI0;
 }
 
 
@@ -98,10 +101,10 @@ uint8_t gpio_i2c_trigger_seen(void)
  */
 void EXTI0_IRQHandler(void)
 {
-    if (EXTI->PR & EXTI_Line0)
+    if (EXTI->PR & I2C_EXTI0)
     {
-        EXTI->PR = EXTI_Line0;
-        EXTI->IMR &= ~EXTI_Line0;
+        EXTI->PR = I2C_EXTI0;
+        EXTI->IMR &= ~I2C_EXTI0;
 
         if (GPIOA->IDR & CH1_PIN)
             i2c_start_seen = 1;

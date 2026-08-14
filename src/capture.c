@@ -51,9 +51,9 @@ void capture_set_backend_dma(uint8_t enable) { backend_use_dma = enable ? 1 : 0;
 uint8_t capture_get_backend_dma(void) { return backend_use_dma; }
 
 /*
- * Wait for the configured GPIO edge.  In I2C mode the trigger is deliberately
+ * Wait for the configured GPIO edge. In I2C mode the trigger is deliberately
  * different: TS_INT is only an auxiliary signal and must never be required
- * to start a bus capture.  Instead we trigger on an actual I2C START:
+ * to start a bus capture. Instead we trigger on an actual I2C START:
  * SDA falling while SCL is high.
  */
 static uint8_t wait_for_trigger(void)
@@ -163,10 +163,9 @@ static void decode_i2c(void)
     uart_print("CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI\r\n");
     uart_print("Bus: TOUCH PAD (TAS5534 audio I2C is separate)\r\n");
 
-    /* DMA begins just after the START edge.  The first sample is therefore
-       normally SDA=0/SCL=1.  Treat that initial state as the START that
-       armed the capture, rather than requiring the edge to be present in the
-       buffer itself. */
+    /* DMA begins just after the START edge. The first sample is therefore
+       normally SDA=0/SCL=1. Treat that initial state as the START that
+       armed the capture, rather than requiring the edge to be present. */
     if((prev & 0x03) == 0x02)
     {
         in_frame=1;
@@ -195,8 +194,10 @@ static void decode_i2c(void)
             ts_int_last=i;
         }
 
-        /* START: SDA falling while SCL remains high. */
-        if(prev_sda && !curr_sda && prev_scl && curr_scl)
+        /* START/STOP are bus conditions, not clock edges. Only the new SCL
+           level is required here. This catches SDA and SCL transitions that
+           happen between adjacent 1 MHz samples without missing a STOP. */
+        if(prev_sda && !curr_sda && curr_scl)
         {
             starts++;
             in_frame=1;
@@ -206,8 +207,7 @@ static void decode_i2c(void)
             uart_print("START @ "); uart_print_uint(i); uart_print("\r\n");
         }
 
-        /* STOP: SDA rising while SCL remains high. */
-        if(!prev_sda && curr_sda && prev_scl && curr_scl)
+        if(!prev_sda && curr_sda && curr_scl)
         {
             if(in_frame)
             {

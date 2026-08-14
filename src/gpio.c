@@ -2,6 +2,10 @@
 
 #include "gpio.h"
 #include "board.h"
+#include "misc.h"
+
+
+static volatile uint8_t i2c_start_seen = 0;
 
 
 void gpio_init(void)
@@ -10,7 +14,8 @@ void gpio_init(void)
 
     RCC_APB2PeriphClockCmd(
         RCC_APB2Periph_GPIOA |
-        RCC_APB2Periph_GPIOB,
+        RCC_APB2Periph_GPIOB |
+        RCC_APB2Periph_AFIO,
         ENABLE
     );
 
@@ -24,6 +29,31 @@ void gpio_init(void)
     gpio.GPIO_Speed = GPIO_Speed_50MHz;
 
     GPIO_Init(LOGIC_GPIO_PORT, &gpio);
+
+    /*
+     * Hardware I2C START trigger:
+     * PA0/CH0 is the SDA input and EXTI0 is mapped to port A.
+     * Falling edges are enabled; the ISR verifies that PA1/SCL is high
+     * before accepting the edge as a real I2C START condition.
+     *
+     * Do this here rather than in the I2C decoder so the trigger is armed
+     * before the user starts interacting with the target board.
+     */
+    AFIO->EXTICR[0] &= ~(0x0Fu << 0); /* EXTI0 = PA0 */
+    EXTI->IMR &= ~EXTI_Line0;
+    EXTI->EMR &= ~EXTI_Line0;
+    EXTI->RTSR &= ~EXTI_Line0;
+    EXTI->FTSR |= EXTI_Line0;
+    EXTI->PR = EXTI_Line0;
+
+    {
+        NVIC_InitTypeDef nvic;
+        nvic.NVIC_IRQChannel = EXTI0_IRQn;
+        nvic.NVIC_IRQChannelPreemptionPriority = 0;
+        nvic.NVIC_IRQChannelSubPriority = 1;
+        nvic.NVIC_IRQChannelCmd = ENABLE;
+        NVIC_Init(&nvic);
+    }
 
     gpio.GPIO_Pin = BUTTON_PIN;
     gpio.GPIO_Mode = GPIO_Mode_IPU;
@@ -45,6 +75,37 @@ uint8_t logic_read(void)
     return (uint8_t)(
         LOGIC_GPIO_PORT->IDR & 0x0F
     );
+}
+
+
+void gpio_i2c_trigger_arm(void)
+{
+    i2c_start_seen = 0;
+    EXTI->PR = EXTI_Line0;
+    EXTI->IMR |= EXTI_Line0;
+}
+
+
+uint8_t gpio_i2c_trigger_seen(void)
+{
+    return i2c_start_seen;
+}
+
+
+/*
+ * CH0/PA0 falling-edge ISR used only by the passive I2C trigger.
+ * A falling SDA edge is an I2C START only when SCL is high.
+ */
+void EXTI0_IRQHandler(void)
+{
+    if (EXTI->PR & EXTI_Line0)
+    {
+        EXTI->PR = EXTI_Line0;
+        EXTI->IMR &= ~EXTI_Line0;
+
+        if (GPIOA->IDR & CH1_PIN)
+            i2c_start_seen = 1;
+    }
 }
 
 

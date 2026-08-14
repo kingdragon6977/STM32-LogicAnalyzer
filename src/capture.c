@@ -50,36 +50,66 @@ void capture_set_trigger(uint8_t channel,uint8_t rising)
 void capture_set_backend_dma(uint8_t enable) { backend_use_dma = enable ? 1 : 0; }
 uint8_t capture_get_backend_dma(void) { return backend_use_dma; }
 
+/*
+ * Wait for the configured GPIO edge.  In I2C mode the trigger is deliberately
+ * different: TS_INT is only an auxiliary signal and must never be required
+ * to start a bus capture.  Instead we trigger on an actual I2C START:
+ * SDA falling while SCL is high.
+ */
 static uint8_t wait_for_trigger(void)
 {
-    uint8_t mask = (uint8_t)(1u << trigger_channel);
     uint8_t last = logic_read();
     uint32_t timeout = (mode == MODE_I2C) ? 0xFFFFFFFFu : 10000000u;
 
-    uart_print("Waiting for trigger...\r\n");
-    while(timeout--)
+    if(mode == MODE_I2C)
     {
-        uint8_t now = logic_read();
-        if(trigger_rising)
+        uart_print("Waiting for I2C START (SDA falling while SCL high)...\r\n");
+        while(timeout--)
         {
-            if(!(last & mask) && (now & mask))
+            uint8_t now = logic_read();
+            uint8_t last_sda = last & 0x01;
+            uint8_t last_scl = (last >> 1) & 0x01;
+            uint8_t now_sda  = now & 0x01;
+            uint8_t now_scl  = (now >> 1) & 0x01;
+
+            if(last_sda && !now_sda && last_scl && now_scl)
             {
-                uart_print("Trigger detected\r\n");
+                uart_print("I2C START trigger detected\r\n");
                 return 1;
             }
+            last = now;
         }
-        else
-        {
-            if((last & mask) && !(now & mask))
-            {
-                uart_print("Trigger detected\r\n");
-                return 1;
-            }
-        }
-        last = now;
+        uart_print("I2C trigger timeout\r\n");
+        return 0;
     }
-    uart_print("Trigger timeout\r\n");
-    return 0;
+
+    {
+        uint8_t mask = (uint8_t)(1u << trigger_channel);
+        uart_print("Waiting for trigger...\r\n");
+        while(timeout--)
+        {
+            uint8_t now = logic_read();
+            if(trigger_rising)
+            {
+                if(!(last & mask) && (now & mask))
+                {
+                    uart_print("Trigger detected\r\n");
+                    return 1;
+                }
+            }
+            else
+            {
+                if((last & mask) && !(now & mask))
+                {
+                    uart_print("Trigger detected\r\n");
+                    return 1;
+                }
+            }
+            last = now;
+        }
+        uart_print("Trigger timeout\r\n");
+        return 0;
+    }
 }
 
 static void decode_edges(void)
@@ -117,8 +147,7 @@ static void decode_edges(void)
 
 /* Passive I2C decoder for the touch-pad bus.
  * CH0=TS_SDA, CH1=TS_SCL, CH2=TS_INT/HI.
- * CH2 is treated as an auxiliary interrupt signal: count its edges but do
- * not dump every transition, because touch controllers can chatter rapidly.
+ * CH2 is auxiliary only; it is never used as the I2C trigger.
  */
 static void decode_i2c(void)
 {
@@ -134,8 +163,10 @@ static void decode_i2c(void)
     uart_print("CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI\r\n");
     uart_print("Bus: TOUCH PAD (TAS5534 audio I2C is separate)\r\n");
 
-    /* If the trigger was an SDA falling edge, verify that SCL is high in the
-       first captured sample. Otherwise the trigger was not an I2C START. */
+    /* DMA begins just after the START edge.  The first sample is therefore
+       normally SDA=0/SCL=1.  Treat that initial state as the START that
+       armed the capture, rather than requiring the edge to be present in the
+       buffer itself. */
     if((prev & 0x03) == 0x02)
     {
         in_frame=1;
@@ -164,7 +195,7 @@ static void decode_i2c(void)
             ts_int_last=i;
         }
 
-        /* START: SDA falling while SCL is high. */
+        /* START: SDA falling while SCL remains high. */
         if(prev_sda && !curr_sda && prev_scl && curr_scl)
         {
             starts++;
@@ -175,7 +206,7 @@ static void decode_i2c(void)
             uart_print("START @ "); uart_print_uint(i); uart_print("\r\n");
         }
 
-        /* STOP: SDA rising while SCL is high. */
+        /* STOP: SDA rising while SCL remains high. */
         if(!prev_sda && curr_sda && prev_scl && curr_scl)
         {
             if(in_frame)
@@ -189,8 +220,7 @@ static void decode_i2c(void)
             first_byte=1;
         }
 
-        /* Sample data on SCL rising edges. I2C bytes are 8 data bits followed
-           by a ninth ACK/NACK bit. */
+        /* Sample I2C data/ACK on SCL rising edges. */
         if(!prev_scl && curr_scl && in_frame)
         {
             if(bit_count < 8)

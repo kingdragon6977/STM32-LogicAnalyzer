@@ -3,6 +3,7 @@
 #include "uart.h"
 #include "capture.h"
 #include "i2c_master.h"
+#include "freq_counter.h"
 #include "board.h"
 #include <string.h>
 #include <stdint.h>
@@ -21,6 +22,7 @@ static void process_command(void)
         uart_print(" help\r\n");
         uart_print(" capture\r\n");
         uart_print(" capture raw\r\n");
+        uart_print(" freq\r\n");
         uart_print(" mode edge\r\n");
         uart_print(" mode i2c\r\n");
         uart_print(" rate 1k\r\n");
@@ -60,6 +62,10 @@ static void process_command(void)
     else if(strcmp(cmd,"capture raw")==0)
     {
         capture_raw();
+    }
+    else if(strcmp(cmd,"freq")==0)
+    {
+        freq_counter_measure();
     }
     else if(strcmp(cmd,"i2c scan")==0)
     {

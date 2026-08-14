@@ -5,7 +5,7 @@
 #include "uart.h"
 
 /*
- * TIM2 external clock mode 2 uses PA0/ETR.  A /1024 timer prescaler keeps
+ * TIM2 external clock mode 2 uses PA0/ETR. A /1024 timer prescaler keeps
  * both an 8 MHz HSE signal and a 36 MHz PLL/2 MCO signal inside the 16-bit
  * TIM2 counter during the 100 ms measurement window.
  */
@@ -17,21 +17,19 @@ static uint8_t initialized = 0;
 static uint32_t timer_clock_hz(void)
 {
     uint32_t ppre = (RCC->CFGR >> 8) & 0x7u;
-    uint32_t pclk1 = SystemCoreClock;
+    uint32_t pclk1;
 
-    if ((ppre & 0x4u) == 0u)
-        pclk1 = SystemCoreClock;
-    else if ((ppre & 0x3u) == 0u)
-        pclk1 = SystemCoreClock / 2u;
-    else if ((ppre & 0x3u) == 1u)
-        pclk1 = SystemCoreClock / 4u;
-    else if ((ppre & 0x3u) == 2u)
-        pclk1 = SystemCoreClock / 8u;
-    else
-        pclk1 = SystemCoreClock / 16u;
+    switch (ppre)
+    {
+        case 4u: pclk1 = SystemCoreClock / 2u;  break;
+        case 5u: pclk1 = SystemCoreClock / 4u;  break;
+        case 6u: pclk1 = SystemCoreClock / 8u;  break;
+        case 7u: pclk1 = SystemCoreClock / 16u; break;
+        default: pclk1 = SystemCoreClock;      break;
+    }
 
-    /* STM32F1 timers run at 2 x PCLK when the APB prescaler is not /1. */
-    return ((ppre & 0x4u) != 0u) ? (pclk1 * 2u) : pclk1;
+    /* STM32F1 timers run at 2 x PCLK when APB1 is prescaled. */
+    return (ppre >= 4u) ? (pclk1 * 2u) : pclk1;
 }
 
 void freq_counter_init(void)
@@ -74,9 +72,9 @@ void freq_counter_measure(void)
                             0);
     TIM_SetCounter(TIM2, 0);
 
-    /* TIM4 supplies a 100 ms measurement gate from the analyzer's clock. */
+    /* TIM4 supplies a 100 ms measurement gate from the analyzer clock. */
     gate_timer_hz = timer_clock_hz();
-    gate_ticks = (gate_timer_hz / 10000u);
+    gate_ticks = gate_timer_hz / 10000u;
     if (gate_ticks == 0u)
         gate_ticks = 1u;
 
@@ -99,9 +97,10 @@ void freq_counter_measure(void)
     TIM4->SR &= ~TIM_SR_UIF;
 
     raw_counts = TIM_GetCounter(TIM2);
-    frequency_hz = (uint32_t)(((uint64_t)raw_counts *
-                               (uint64_t)(FREQ_COUNTER_PRESCALER + 1u) *
-                               1000u) / FREQ_GATE_MS);
+
+    /* 100 ms gate and /1024 input prescaler => count * 10240 Hz. */
+    frequency_hz = raw_counts * (FREQ_COUNTER_PRESCALER + 1u) *
+                   (1000u / FREQ_GATE_MS);
 
     uart_print("Raw timer counts: ");
     uart_print_uint(raw_counts);

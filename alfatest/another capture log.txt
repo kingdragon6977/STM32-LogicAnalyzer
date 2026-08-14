@@ -1,0 +1,1577 @@
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+
+I2C SUMMARY
+STARTs : 0
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 0
+TS_INT falling: 0
+Transitions: 0
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ 305
+ADDR 0x37 W NACK
+START @ 2059
+ADDR 0x37 W NACK
+START @ 3812
+ADDR 0x37 W NACK
+START @ 5566
+ADDR 0x37 W NACK
+START @ 7286
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 5
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+TS_INT rising : 0
+TS_INT falling: 0
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ 638
+ADDR 0x37 W NACK
+START @ 2235
+ADDR 0x37 W NACK
+START @ 3831
+ADDR 0x37 W NACK
+START @ 5427
+ADDR 0x37 W NACK
+START @ 7023
+ADDR 0x37 W NACK
+
+I2C SUMMARY
+STARTs : 5
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+TS_INT rising : 0
+TS_INT falling: 0
+Transitions: 130
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+
+I2C SUMMARY
+STARTs : 0
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 0
+TS_INT falling: 0
+Transitions: 0
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+
+I2C SUMMARY
+STARTs : 0
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 0
+TS_INT falling: 0
+Transitions: 0
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ 188
+ADDR 0x37 W NACK
+START @ 1784
+ADDR 0x37 W NACK
+START @ 3380
+ADDR 0x37 W NACK
+START @ 4977
+ADDR 0x37 W NACK
+START @ 6573
+ADDR 0x37 W NACK
+START @ 8169
+
+I2C SUMMARY
+STARTs : 6
+STOPs  : 0
+Bytes  : 5
+ACKs   : 0
+NACKs  : 5
+TS_INT rising : 1
+TS_INT falling: 1
+TS_INT first edge: 8019
+TS_INT last edge : 8036
+Transitions: 132
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 11
+TS_INT falling: 11
+TS_INT first edge: 300
+TS_INT last edge : 2168
+Transitions: 22
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+ADDR 0x00 W ACK
+DATA 0x00 ACK
+DATA 0x00 ACK
+DATA 0x00 ACK
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 4
+ACKs   : 4
+NACKs  : 0
+TS_INT rising : 0
+TS_INT falling: 0
+Transitions: 76
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 0
+TS_INT falling: 0
+Transitions: 0
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 0
+TS_INT falling: 0
+Transitions: 0
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 24
+TS_INT falling: 24
+TS_INT first edge: 823
+TS_INT last edge : 3344
+Transitions: 48
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 21
+TS_INT falling: 22
+TS_INT first edge: 757
+TS_INT last edge : 4997
+Transitions: 43
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 0
+TS_INT falling: 0
+Transitions: 0
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 0
+TS_INT falling: 0
+Transitions: 0
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 2
+TS_INT falling: 1
+TS_INT first edge: 605
+TS_INT last edge : 2837
+Transitions: 3
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 0
+TS_INT falling: 0
+Transitions: 0
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 14
+TS_INT falling: 13
+TS_INT first edge: 2429
+TS_INT last edge : 5026
+Transitions: 27
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 62
+TS_INT falling: 63
+TS_INT first edge: 86
+TS_INT last edge : 7164
+Transitions: 125
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 0
+TS_INT falling: 1
+Transitions: 1
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 2
+TS_INT falling: 2
+TS_INT first edge: 6452
+TS_INT last edge : 6635
+Transitions: 4
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 2
+TS_INT falling: 2
+TS_INT first edge: 547
+TS_INT last edge : 757
+Transitions: 4
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 6
+TS_INT falling: 5
+TS_INT first edge: 9
+TS_INT last edge : 386
+Transitions: 11
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 0
+TS_INT falling: 0
+Transitions: 0
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 0
+TS_INT falling: 0
+Transitions: 0
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+ADDR 0x00 W ACK
+DATA 0x00 ACK
+DATA 0x00 ACK
+DATA 0x00 ACK
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 4
+ACKs   : 4
+NACKs  : 0
+TS_INT rising : 0
+TS_INT falling: 0
+Transitions: 76
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 0
+TS_INT falling: 0
+Transitions: 0
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 2
+TS_INT falling: 2
+TS_INT first edge: 4647
+TS_INT last edge : 4662
+Transitions: 4
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 81
+TS_INT falling: 81
+TS_INT first edge: 508
+TS_INT last edge : 8171
+Transitions: 162
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 0
+TS_INT falling: 1
+Transitions: 1
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 0
+TS_INT falling: 0
+Transitions: 0
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 0
+TS_INT falling: 0
+Transitions: 0
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 0
+TS_INT falling: 0
+Transitions: 0
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 8
+TS_INT falling: 8
+TS_INT first edge: 6959
+TS_INT last edge : 8190
+Transitions: 16
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 8
+TS_INT falling: 8
+TS_INT first edge: 1862
+TS_INT last edge : 4337
+Transitions: 16
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 2
+TS_INT falling: 2
+TS_INT first edge: 7252
+TS_INT last edge : 7260
+Transitions: 4
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 12
+TS_INT falling: 11
+TS_INT first edge: 2381
+TS_INT last edge : 4078
+Transitions: 23
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 19
+TS_INT falling: 19
+TS_INT first edge: 3957
+TS_INT last edge : 8041
+Transitions: 38
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 0
+TS_INT falling: 0
+Transitions: 0
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+ADDR 0x00 W ACK
+DATA 0x00 ACK
+DATA 0x00 ACK
+DATA 0x00 ACK
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 4
+ACKs   : 4
+NACKs  : 0
+TS_INT rising : 30
+TS_INT falling: 31
+TS_INT first edge: 573
+TS_INT last edge : 8100
+Transitions: 137
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 38
+TS_INT falling: 37
+TS_INT first edge: 463
+TS_INT last edge : 3925
+Transitions: 75
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 22
+TS_INT falling: 22
+TS_INT first edge: 21
+TS_INT last edge : 5449
+Transitions: 44
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 19
+TS_INT falling: 18
+TS_INT first edge: 278
+TS_INT last edge : 6666
+Transitions: 37
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 95
+TS_INT falling: 96
+TS_INT first edge: 1713
+TS_INT last edge : 7981
+Transitions: 191
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 18
+TS_INT falling: 18
+TS_INT first edge: 5
+TS_INT last edge : 5980
+Transitions: 36
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 10
+TS_INT falling: 10
+TS_INT first edge: 476
+TS_INT last edge : 2141
+Transitions: 20
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 14
+TS_INT falling: 14
+TS_INT first edge: 521
+TS_INT last edge : 1665
+Transitions: 28
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 0
+TS_INT falling: 0
+Transitions: 0
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 4
+TS_INT falling: 5
+TS_INT first edge: 935
+TS_INT last edge : 1360
+Transitions: 9
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 40
+TS_INT falling: 41
+TS_INT first edge: 210
+TS_INT last edge : 7413
+Transitions: 81
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+START @ trigger
+
+I2C SUMMARY
+STARTs : 1
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 12
+TS_INT falling: 13
+TS_INT first edge: 759
+TS_INT last edge : 1330
+Transitions: 25
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192
+Rate : 1000000 Hz
+Analyzer Armed
+Waiting for trigger...
+Trigger detected
+Capture Started
+Hardware DMA sampler running...
+DMA sampling complete
+
+I2C PASSIVE DECODE
+CH0=TS_SDA CH1=TS_SCL CH2=TS_INT/HI
+Bus: TOUCH PAD (TAS5534 audio I2C is separate)
+
+I2C SUMMARY
+STARTs : 0
+STOPs  : 0
+Bytes  : 0
+ACKs   : 0
+NACKs  : 0
+TS_INT rising : 14
+TS_INT falling: 13
+TS_INT first edge: 1280
+TS_INT last edge : 8125
+Transitions: 28
+
+DONE
+
+====================================
+STM32 Logic Analyzer v1.0
+====================================
+Samples : 8192

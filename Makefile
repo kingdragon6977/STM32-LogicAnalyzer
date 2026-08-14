@@ -29,6 +29,7 @@ src/main.c \
 src/uart.c \
 src/test_signal.c \
 src/sampler.c \
+src/freq_counter.c \
 STM32F10x_StdPeriph_Driver/src/stm32f10x_tim.c \
 STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.c \
 STM32F10x_StdPeriph_Driver/src/misc.c \

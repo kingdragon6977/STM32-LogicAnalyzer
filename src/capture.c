@@ -51,10 +51,10 @@ void capture_set_backend_dma(uint8_t enable) { backend_use_dma = enable ? 1 : 0;
 uint8_t capture_get_backend_dma(void) { return backend_use_dma; }
 
 /*
- * Wait for the configured GPIO edge. In I2C mode the trigger is deliberately
- * different: TS_INT is only an auxiliary signal and must never be required
- * to start a bus capture. Instead we trigger on an actual I2C START:
- * SDA falling while SCL is high.
+ * Wait for the configured GPIO edge. In I2C mode the trigger is hardware
+ * based: EXTI0 watches CH0/PA0 (SDA) for a falling edge and the ISR accepts
+ * it only while CH1/PA1 (SCL) is high. This avoids missing the short START
+ * condition because the CPU was polling logic_read() at the wrong instant.
  */
 static uint8_t wait_for_trigger(void)
 {
@@ -63,24 +63,16 @@ static uint8_t wait_for_trigger(void)
 
     if(mode == MODE_I2C)
     {
-        uart_print("Waiting for I2C START (SDA falling while SCL high)...\r\n");
-        while(timeout--)
-        {
-            uint8_t now = logic_read();
-            uint8_t last_sda = last & 0x01;
-            uint8_t last_scl = (last >> 1) & 0x01;
-            uint8_t now_sda  = now & 0x01;
-            uint8_t now_scl  = (now >> 1) & 0x01;
+        uart_print("Waiting for hardware I2C START (CH0 SDA falling, CH1 SCL high)...\r\n");
+        gpio_i2c_trigger_arm();
 
-            if(last_sda && !now_sda && last_scl && now_scl)
-            {
-                uart_print("I2C START trigger detected\r\n");
-                return 1;
-            }
-            last = now;
+        while(!gpio_i2c_trigger_seen())
+        {
+            /* Hardware EXTI0 catches the START edge; do not poll it. */
         }
-        uart_print("I2C trigger timeout\r\n");
-        return 0;
+
+        uart_print("I2C START trigger detected (EXTI0)\r\n");
+        return 1;
     }
 
     {
@@ -194,9 +186,7 @@ static void decode_i2c(void)
             ts_int_last=i;
         }
 
-        /* START/STOP are bus conditions, not clock edges. Only the new SCL
-           level is required here. This catches SDA and SCL transitions that
-           happen between adjacent 1 MHz samples without missing a STOP. */
+        /* START/STOP are bus conditions, not clock edges. */
         if(prev_sda && !curr_sda && curr_scl)
         {
             starts++;

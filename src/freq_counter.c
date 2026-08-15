@@ -9,15 +9,16 @@
  * Frequency counter:
  *
  * CH0 is PA0, which is TIM2 channel 1 with the normal (no-remap) mapping.
- * Rather than using the ETR path, use TIM2 CH1 as the external clock source
- * through TI1FP1. This gives us an explicit GPIO -> timer input path and lets
- * the timer count rising edges directly.
+ * TIM2 CH1/ETR share PA0 on STM32F1, so only one path is used at a time.
+ * The CH1 external-clock path is used here because it gives an explicit
+ * GPIO -> timer input configuration.
  *
- * TIM2's own prescaler divides the external edge stream by 1024. A 100 ms
- * gate therefore gives about 781 counts for 8 MHz and about 3516 for 36 MHz.
+ * TIM2's prescaler divides the external edge stream by 1024. A 100 ms gate
+ * therefore gives about 781 counts for 8 MHz and about 3516 for 36 MHz.
  */
 #define FREQ_COUNTER_PRESCALER 1023u
 #define FREQ_GATE_MS            100u
+#define PA0_ACTIVITY_SAMPLES    20000u
 
 static uint8_t initialized = 0;
 
@@ -46,13 +47,47 @@ static void pa0_prepare_for_tim2_ch1(void)
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO,
                            ENABLE);
 
+    /* Pull PA0 low when nothing is connected so the diagnostic is repeatable. */
     gpio.GPIO_Pin = GPIO_Pin_0;
-    gpio.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+    gpio.GPIO_Mode = GPIO_Mode_IPD;
     gpio.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOA, &gpio);
 
-    /* TIM2 remap = 00: CH1 = PA0. */
+    /* TIM2 remap = 00: CH1/ETR = PA0. */
     AFIO->MAPR &= ~(0x3u << 8);
+}
+
+/*
+ * Cheap pin-level sanity check. This is deliberately not used to calculate
+ * frequency; it only tells us whether PA0 is actually seeing transitions.
+ * For an 8 MHz MCO signal both HIGH and LOW must be observed.
+ */
+static void pa0_activity_test(void)
+{
+    uint32_t high = 0u;
+    uint32_t low = 0u;
+    uint32_t i;
+
+    for (i = 0u; i < PA0_ACTIVITY_SAMPLES; ++i)
+    {
+        if ((GPIOA->IDR & GPIO_Pin_0) != 0u)
+            ++high;
+        else
+            ++low;
+    }
+
+    uart_print("PA0 level samples: HIGH=");
+    uart_print_uint(high);
+    uart_print(" LOW=");
+    uart_print_uint(low);
+    uart_print("\r\n");
+
+    if (high != 0u && low != 0u)
+        uart_print("PA0 activity: signal transitions present\r\n");
+    else if (high != 0u)
+        uart_print("PA0 activity: stuck HIGH / check source\r\n");
+    else
+        uart_print("PA0 activity: no HIGH samples / check wiring\r\n");
 }
 
 void freq_counter_init(void)
@@ -77,8 +112,13 @@ void freq_counter_measure(void)
     uart_print("Input: CH0 / PA0 (TIM2 CH1)\r\n");
     uart_print("Gate: 100 ms\r\n");
     uart_print("TIM2 CH1 external-clock mode, input /1024\r\n");
+    uart_print("Expected test source: PA8 MCO HSE -> PA0, common GND\r\n");
 
     pa0_prepare_for_tim2_ch1();
+    pa0_activity_test();
+
+    /* Keep the software clock value synchronized with the actual RCC setup. */
+    SystemCoreClockUpdate();
 
     /* Stop normal sampling and its TIM2 update interrupt. */
     TIM_Cmd(TIM2, DISABLE);

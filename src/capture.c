@@ -65,11 +65,32 @@ static uint8_t wait_for_trigger(void)
     if(mode == MODE_I2C)
     {
         uart_print("Waiting for I2C START: SDA(CH0) falling while SCL(CH1) HIGH...\r\n");
+        uart_print("Reset/wake the AV6301 now; timeout is 5 seconds.\r\n");
         gpio_i2c_trigger_arm();
-        while(!gpio_i2c_trigger_seen())
+
+        /*
+         * The old implementation waited forever here.  That makes the CLI
+         * appear dead whenever the bus is idle, the master has already
+         * finished initialization, or EXTI0 does not see a START.  A finite
+         * timeout keeps the console alive and makes the wiring/traffic
+         * problem visible.
+         *
+         * This is deliberately a coarse software timeout.  The actual
+         * START detection remains interrupt driven, so SDA is never driven
+         * by the analyzer.
+         */
+        while(!gpio_i2c_trigger_seen() && timeout--)
         {
-            /* EXTI0 catches the START edge; this loop does not poll SDA. */
+            __asm__("nop");
         }
+
+        if(!gpio_i2c_trigger_seen())
+        {
+            uart_print("I2C START timeout: no SDA falling edge with SCL HIGH.\r\n");
+            uart_print("Check CH0=SDA, CH1=SCL, common GND, pull-ups, and reset/wake the master.\r\n");
+            return 0;
+        }
+
         uart_print("I2C START detected\r\n");
         return 1;
     }
@@ -135,16 +156,6 @@ static void decode_edges(void)
     uart_print("CH3 edges: "); uart_print_uint(edge_count[3]); uart_print("\r\n");
 }
 
-/*
- * Passive I2C decoder.
- * CH0 = SDA, CH1 = SCL. CH2/CH3 are captured but ignored by the decoder.
- * The analyzer never drives either I2C line in this mode.
- *
- * I2C data is sampled on SCL rising edges. START/STOP are recognized from
- * SDA transitions while SCL is high. The first byte is printed as a 7-bit
- * address plus R/W; following bytes are printed as DATA. ACK/NACK is sampled
- * on the ninth clock.
- */
 static void decode_i2c(void)
 {
     uint32_t i;
@@ -161,7 +172,7 @@ static void decode_i2c(void)
     uart_print("Capture rate: "); uart_print_uint(sample_rate); uart_print(" Hz\r\n");
     uart_print("No SDA/SCL drive is performed.\r\n\r\n");
 
-    /* Capture is intentionally started just after the START trigger. */
+    /* The capture begins immediately after the START trigger. */
     if(((prev & 0x03) == 0x02) || ((prev & 0x03) == 0x00))
     {
         in_frame = 1;

@@ -25,11 +25,13 @@ static void process_command(void)
         uart_print(" freq\r\n");
         uart_print(" mode edge\r\n");
         uart_print(" mode i2c\r\n");
+        uart_print(" i2c snoop\r\n");
         uart_print(" rate 1k\r\n");
         uart_print(" rate 100k\r\n");
         uart_print(" rate 500k\r\n");
         uart_print(" rate 1m\r\n");
         uart_print(" rate 2m\r\n");
+        uart_print(" rate 4m\r\n");
         uart_print(" i2c scan\r\n");
         uart_print(" i2c test\r\n");
         uart_print(" i2c capture-test\r\n");
@@ -66,6 +68,17 @@ static void process_command(void)
     else if(strcmp(cmd,"freq")==0)
     {
         freq_counter_measure();
+    }
+    else if(strcmp(cmd,"i2c snoop")==0)
+    {
+        /* Passive only: this command never initializes or drives the I2C master. */
+        capture_set_mode(MODE_I2C);
+        capture_set_rate_enum(RATE_4M);
+        capture_set_trigger(0,0);
+        uart_print("I2C SNOOP armed: CH0=SDA, CH1=SCL, CH2/CH3=aux\r\n");
+        uart_print("PASSIVE ONLY - analyzer will not drive SDA/SCL\r\n");
+        uart_print("Sampling at 4 MHz; waiting for SDA falling while SCL is HIGH\r\n");
+        capture_run();
     }
     else if(strcmp(cmd,"i2c scan")==0)
     {
@@ -105,7 +118,7 @@ static void process_command(void)
     else if(strcmp(cmd,"mode i2c")==0)
     {
         capture_set_mode(MODE_I2C);
-        uart_print("Mode: I2C\r\n");
+        uart_print("Mode: I2C passive\r\n");
     }
     else if(strcmp(cmd,"rate 1k")==0)
     {
@@ -126,6 +139,10 @@ static void process_command(void)
     else if(strcmp(cmd,"rate 2m")==0)
     {
         capture_set_rate_enum(RATE_2M);
+    }
+    else if(strcmp(cmd,"rate 4m")==0)
+    {
+        capture_set_rate_enum(RATE_4M);
     }
     else if(strcmp(cmd,"trigger ch0 rising")==0)
     {
@@ -183,12 +200,14 @@ static void process_command(void)
         uart_print("----------------\r\n");
         uart_print("Mode: ");
         if(capture_get_mode()==MODE_I2C)
-            uart_print("I2C\r\n");
+            uart_print("I2C PASSIVE\r\n");
         else
             uart_print("EDGE\r\n");
         uart_print("Rate: ");
         uart_print_uint(capture_get_rate());
         uart_print(" Hz\r\n");
+        uart_print("Inputs: CH0=PA0 CH1=PA1 CH2=PA2 CH3=PA3\r\n");
+        uart_print("I2C snoop: CH0=SDA CH1=SCL (no bus driving)\r\n");
     }
     else if(strcmp(cmd,"test on")==0)
     {

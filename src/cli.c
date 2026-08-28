@@ -11,6 +11,15 @@
 static char cmd[64];
 static uint8_t cmd_index = 0;
 
+static void audio_test_help(void)
+{
+    uart_print("Audio test output: PA6 / TIM3_CH1, 1 kHz, 50% duty, 3.3 V logic square wave\r\n");
+    uart_print("DO NOT connect PA6 directly to an analog codec input.\r\n");
+    uart_print("Use attenuation + AC coupling before TLV320ADC3101 IN1L(P).\r\n");
+    uart_print("Suggested: PA6 -> 100k -> node -> 10k to GND -> 1uF series capacitor -> IN1L(P)\r\n");
+    uart_print("Tie analyzer GND and audio_controller GND together.\r\n");
+}
+
 static void process_command(void)
 {
     cmd[cmd_index] = 0;
@@ -53,6 +62,9 @@ static void process_command(void)
         uart_print(" test 10k\r\n");
         uart_print(" test 100k\r\n");
         uart_print(" test 500k\r\n");
+        uart_print(" audio-test on      (set + start 1 kHz on PA6)\r\n");
+        uart_print(" audio-test off\r\n");
+        uart_print(" audio-test wiring\r\n");
         uart_print(" backend dma\r\n");
         uart_print(" backend irq\r\n");
         uart_print(" status\r\n");
@@ -207,6 +219,7 @@ static void process_command(void)
         uart_print_uint(capture_get_rate());
         uart_print(" Hz\r\n");
         uart_print("Inputs: CH0=PA0 CH1=PA1 CH2=PA2 CH3=PA3\r\n");
+        uart_print("Test output: PA6=TIM3_CH1\r\n");
         uart_print("I2C snoop: CH0=SDA CH1=SCL (no bus driving)\r\n");
     }
     else if(strcmp(cmd,"test on")==0)
@@ -238,6 +251,22 @@ static void process_command(void)
     {
         test_signal_set_rate(500000);
         uart_print("Test frequency: 500000 Hz\r\n");
+    }
+    else if(strcmp(cmd,"audio-test on")==0)
+    {
+        test_signal_set_rate(1000);
+        test_signal_enable();
+        uart_print("AUDIO TEST ON: PA6 = 1000 Hz, 50% duty, 3.3 V logic square wave\r\n");
+        uart_print("Use attenuation + AC coupling before TLV320 IN1L(P).\r\n");
+    }
+    else if(strcmp(cmd,"audio-test off")==0)
+    {
+        test_signal_disable();
+        uart_print("AUDIO TEST OFF\r\n");
+    }
+    else if(strcmp(cmd,"audio-test wiring")==0)
+    {
+        audio_test_help();
     }
     else
     {

@@ -6,19 +6,40 @@
 
 static uint32_t test_rate = 10000;
 
-void test_signal_init(void)
+static void test_signal_pin_pwm(void)
 {
     GPIO_InitTypeDef gpio;
+
+    gpio.GPIO_Pin = TEST_SIGNAL_PIN;
+    gpio.GPIO_Mode = GPIO_Mode_AF_PP;
+    gpio.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(TEST_SIGNAL_PORT, &gpio);
+}
+
+static void test_signal_pin_low(void)
+{
+    GPIO_InitTypeDef gpio;
+
+    /* Drive the test output to a defined 0 V state while PWM is disabled. */
+    GPIO_ResetBits(TEST_SIGNAL_PORT, TEST_SIGNAL_PIN);
+
+    gpio.GPIO_Pin = TEST_SIGNAL_PIN;
+    gpio.GPIO_Mode = GPIO_Mode_Out_PP;
+    gpio.GPIO_Speed = GPIO_Speed_2MHz;
+    GPIO_Init(TEST_SIGNAL_PORT, &gpio);
+
+    GPIO_ResetBits(TEST_SIGNAL_PORT, TEST_SIGNAL_PIN);
+}
+
+void test_signal_init(void)
+{
     TIM_TimeBaseInitTypeDef tim;
     TIM_OCInitTypeDef oc;
 
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
 
-    gpio.GPIO_Pin = TEST_SIGNAL_PIN;
-    gpio.GPIO_Mode = GPIO_Mode_AF_PP;
-    gpio.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(TEST_SIGNAL_PORT, &gpio);
+    test_signal_pin_pwm();
 
     tim.TIM_Prescaler = 0;
     tim.TIM_CounterMode = TIM_CounterMode_Up;
@@ -36,6 +57,7 @@ void test_signal_init(void)
     TIM_ARRPreloadConfig(TEST_SIGNAL_TIMER, ENABLE);
 
     TIM_Cmd(TEST_SIGNAL_TIMER, DISABLE);
+    test_signal_pin_low();
 }
 
 void test_signal_set_rate(uint32_t hz)
@@ -50,11 +72,14 @@ void test_signal_set_rate(uint32_t hz)
 
 void test_signal_enable(void)
 {
+    /* Restore TIM3_CH1 ownership of PA6 before starting the PWM. */
+    test_signal_pin_pwm();
+    TIM_SetCounter(TEST_SIGNAL_TIMER, 0);
     TIM_Cmd(TEST_SIGNAL_TIMER, ENABLE);
 }
 
 void test_signal_disable(void)
 {
     TIM_Cmd(TEST_SIGNAL_TIMER, DISABLE);
-    TEST_SIGNAL_PORT->BRR = TEST_SIGNAL_PIN;
+    test_signal_pin_low();
 }

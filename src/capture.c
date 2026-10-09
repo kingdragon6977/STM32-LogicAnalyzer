@@ -478,14 +478,17 @@ static void do_sample(void)
 
     if(backend_use_dma)
     {
-        uart_print("Hardware DMA sampler running...\r\n");
+        /*
+         * Do not print between trigger detection and sampler start.  At
+         * 115200 baud even a short status line costs milliseconds and was
+         * hiding the PA0/BOOT0 activity immediately after NRST asserted.
+         */
         dma_capture_start(buffer, CAPTURE_SAMPLES);
         while(!dma_capture_done()) { }
         uart_print("DMA sampling complete\r\n");
     }
     else
     {
-        uart_print("Hardware IRQ sampler running...\r\n");
         sampler_start(buffer, CAPTURE_SAMPLES);
         while(!sampler_done()) { }
         uart_print("IRQ sampling complete\r\n");
@@ -550,7 +553,7 @@ void capture_boot_timing(void)
     uart_print("Rate = 100000 Hz (10 us/sample)\r\n");
     uart_print("Window = 81.92 ms for 8192 samples\r\n");
     uart_print("Trigger = CH3 falling (NRST assert)\r\n");
-    uart_print("NOTE: current ESP reset-low interval is about 25 ms; 4 MHz cannot capture release.\r\n");
+    uart_print("ESP test timing: 20 ms BOOT0 precharge, about 2 ms NRST low.\r\n");
 
     capture_run();
     boot_timing_profile = 0u;

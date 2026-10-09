@@ -115,7 +115,8 @@ static void process_command(void)
     {
         uart_print("Commands:\r\n");
         uart_print(" help\r\n");
-        uart_print(" capture\r\n");
+        uart_print(" capture            (arm using configured trigger)\r\n");
+        uart_print(" arm                (alias for capture)\r\n");
         uart_print(" capture raw\r\n");
         uart_print(" boot capture       (project profile: CH0=PA0 CH1=ESP CH2=BOOT0 CH3=NRST)\r\n");
         uart_print(" boot status        (show project timing setup)\r\n");
@@ -158,7 +159,7 @@ static void process_command(void)
         uart_print(" status\r\n");
         uart_print(" Line editing: Left/Right, Home/End, Backspace/Delete; Up/Down = 8-command history\r\n");
     }
-    else if(strcmp(cmd,"capture")==0)
+    else if(strcmp(cmd,"capture")==0 || strcmp(cmd,"arm")==0)
     {
         capture_run();
     }
@@ -265,42 +266,42 @@ static void process_command(void)
     else if(strcmp(cmd,"trigger ch0 rising")==0)
     {
         capture_set_trigger(0,1);
-        uart_print("Trigger CH0 rising\r\n");
+        uart_print("Trigger CH0 rising configured; run 'capture' or 'arm' to wait for it.\r\n");
     }
     else if(strcmp(cmd,"trigger ch0 falling")==0)
     {
         capture_set_trigger(0,0);
-        uart_print("Trigger CH0 falling\r\n");
+        uart_print("Trigger CH0 falling configured; run 'capture' or 'arm' to wait for it.\r\n");
     }
     else if(strcmp(cmd,"trigger ch1 rising")==0)
     {
         capture_set_trigger(1,1);
-        uart_print("Trigger CH1 rising\r\n");
+        uart_print("Trigger CH1 rising configured; run 'capture' or 'arm' to wait for it.\r\n");
     }
     else if(strcmp(cmd,"trigger ch1 falling")==0)
     {
         capture_set_trigger(1,0);
-        uart_print("Trigger CH1 falling\r\n");
+        uart_print("Trigger CH1 falling configured; run 'capture' or 'arm' to wait for it.\r\n");
     }
     else if(strcmp(cmd,"trigger ch2 rising")==0)
     {
         capture_set_trigger(2,1);
-        uart_print("Trigger CH2 rising\r\n");
+        uart_print("Trigger CH2 rising configured; run 'capture' or 'arm' to wait for it.\r\n");
     }
     else if(strcmp(cmd,"trigger ch2 falling")==0)
     {
         capture_set_trigger(2,0);
-        uart_print("Trigger CH2 falling\r\n");
+        uart_print("Trigger CH2 falling configured; run 'capture' or 'arm' to wait for it.\r\n");
     }
     else if(strcmp(cmd,"trigger ch3 rising")==0)
     {
         capture_set_trigger(3,1);
-        uart_print("Trigger CH3 rising\r\n");
+        uart_print("Trigger CH3 rising configured; run 'capture' or 'arm' to wait for it.\r\n");
     }
     else if(strcmp(cmd,"trigger ch3 falling")==0)
     {
         capture_set_trigger(3,0);
-        uart_print("Trigger CH3 falling\r\n");
+        uart_print("Trigger CH3 falling configured; run 'capture' or 'arm' to wait for it.\r\n");
     }
     else if(strcmp(cmd,"backend dma")==0)
     {

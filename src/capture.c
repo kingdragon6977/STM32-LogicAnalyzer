@@ -319,7 +319,11 @@ static void decode_boot_timing(void)
         uart_print("\r\n");
     }
 
-    if(nrst_rise >= 0)
+    if(!(initial & 4u))
+    {
+        uart_print("BOOT0 at trigger: LOW  FAIL - boot request was not present when reset asserted\r\n");
+    }
+    else if(nrst_rise >= 0)
     {
         if(boot0_fall < 0)
         {
@@ -337,6 +341,13 @@ static void decode_boot_timing(void)
             print_sample_time((uint32_t)(nrst_rise - boot0_fall));
             uart_print("  FAIL for ROM-boot hold\r\n");
         }
+    }
+
+    if(nrst_rise >= 0)
+    {
+        uart_print("NRST low duration: ");
+        print_sample_time((uint32_t)nrst_rise);
+        uart_print("\r\n");
     }
 
     print_compact_waveform();

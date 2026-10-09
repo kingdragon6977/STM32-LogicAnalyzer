@@ -12,6 +12,7 @@ static analyzer_mode_t mode = MODE_EDGE;
 static uint32_t sample_rate = 1000000;
 static uint32_t edge_count[4];
 static volatile uint8_t backend_use_dma = 1;
+static uint8_t boot_timing_profile = 0;
 
 static void normalize_samples(void)
 {
@@ -53,6 +54,9 @@ void capture_set_trigger(uint8_t channel, uint8_t rising)
     trigger_channel = channel & 3;
     trigger_rising = rising ? 1 : 0;
 }
+
+uint8_t capture_get_trigger_channel(void) { return trigger_channel; }
+uint8_t capture_get_trigger_rising(void) { return trigger_rising; }
 
 void capture_set_backend_dma(uint8_t enable) { backend_use_dma = enable ? 1 : 0; }
 uint8_t capture_get_backend_dma(void) { return backend_use_dma; }
@@ -154,6 +158,188 @@ static void decode_edges(void)
     uart_print("CH1 edges: "); uart_print_uint(edge_count[1]); uart_print("\r\n");
     uart_print("CH2 edges: "); uart_print_uint(edge_count[2]); uart_print("\r\n");
     uart_print("CH3 edges: "); uart_print_uint(edge_count[3]); uart_print("\r\n");
+}
+
+
+static void print_sample_time(uint32_t samples)
+{
+    uint64_t ns;
+    uint32_t us;
+    uint32_t frac;
+
+    if(sample_rate == 0u)
+        return;
+
+    ns = ((uint64_t)samples * 1000000000ull) / (uint64_t)sample_rate;
+    us = (uint32_t)(ns / 1000ull);
+    frac = (uint32_t)(ns % 1000ull);
+
+    uart_print_uint(us);
+    uart_putc('.');
+    uart_putc((char)('0' + ((frac / 100u) % 10u)));
+    uart_putc((char)('0' + ((frac / 10u) % 10u)));
+    uart_putc((char)('0' + (frac % 10u)));
+    uart_print(" us");
+}
+
+static int32_t find_edge_after(uint8_t channel, uint8_t rising, uint32_t start)
+{
+    uint32_t i;
+    uint8_t mask = (uint8_t)(1u << (channel & 3u));
+
+    if(start < 1u)
+        start = 1u;
+
+    for(i = start; i < CAPTURE_SAMPLES; ++i)
+    {
+        uint8_t prev = buffer[i - 1u] & mask;
+        uint8_t curr = buffer[i] & mask;
+
+        if(rising)
+        {
+            if(!prev && curr)
+                return (int32_t)i;
+        }
+        else
+        {
+            if(prev && !curr)
+                return (int32_t)i;
+        }
+    }
+
+    return -1;
+}
+
+static void print_compact_waveform(void)
+{
+    const uint32_t columns = 80u;
+    uint32_t ch;
+    uint32_t col;
+    static const char *boot_names[4] = {
+        "PA0/Q1 ", "ESP/Q2 ", "BOOT0  ", "NRST   "
+    };
+
+    uart_print("\r\nCompressed waveform (HIGH='-' LOW='_' mixed='*')\r\n");
+    uart_print("Each column ~= ");
+    print_sample_time((CAPTURE_SAMPLES + columns - 1u) / columns);
+    uart_print("\r\n");
+
+    for(ch = 0u; ch < 4u; ++ch)
+    {
+        uint8_t mask = (uint8_t)(1u << ch);
+        if(boot_timing_profile)
+            uart_print(boot_names[ch]);
+        else
+        {
+            uart_print("CH");
+            uart_putc((char)('0' + ch));
+            uart_print("    ");
+        }
+        uart_print("|");
+
+        for(col = 0u; col < columns; ++col)
+        {
+            uint32_t start = (col * CAPTURE_SAMPLES) / columns;
+            uint32_t end = ((col + 1u) * CAPTURE_SAMPLES) / columns;
+            uint8_t first;
+            uint8_t mixed = 0u;
+            uint32_t i;
+
+            if(end <= start)
+                end = start + 1u;
+            if(end > CAPTURE_SAMPLES)
+                end = CAPTURE_SAMPLES;
+
+            first = buffer[start] & mask;
+            for(i = start + 1u; i < end; ++i)
+            {
+                if((buffer[i] & mask) != first)
+                {
+                    mixed = 1u;
+                    break;
+                }
+            }
+
+            if(mixed)
+                uart_putc('*');
+            else
+                uart_putc(first ? '-' : '_');
+        }
+        uart_print("|\r\n");
+    }
+}
+
+static void decode_boot_timing(void)
+{
+    int32_t pa0_rise;
+    int32_t boot0_fall;
+    int32_t nrst_rise;
+    int32_t esp_rise;
+    uint8_t initial = buffer[0];
+
+    uart_print("\r\nBOOT AUTH / RESET TIMING\r\n");
+    uart_print("------------------------\r\n");
+    uart_print("Mapping: CH0=PA0/Q1 gate, CH1=ESP GPIO0/Q2 gate, CH2=BOOT0, CH3=NRST\r\n");
+    uart_print("Trigger: NRST falling (reset asserted)\r\n");
+    uart_print("Initial sample: PA0="); uart_putc((initial & 1u) ? '1' : '0');
+    uart_print(" ESP="); uart_putc((initial & 2u) ? '1' : '0');
+    uart_print(" BOOT0="); uart_putc((initial & 4u) ? '1' : '0');
+    uart_print(" NRST="); uart_putc((initial & 8u) ? '1' : '0');
+    uart_print("\r\n");
+
+    pa0_rise = find_edge_after(0u, 1u, 1u);
+    esp_rise = find_edge_after(1u, 1u, 1u);
+    boot0_fall = find_edge_after(2u, 0u, 1u);
+    nrst_rise = find_edge_after(3u, 1u, 1u);
+
+    uart_print("PA0 release (LOW->HIGH): ");
+    if(pa0_rise >= 0) { uart_print("S="); uart_print_uint((uint32_t)pa0_rise); uart_print("  t="); print_sample_time((uint32_t)pa0_rise); }
+    else uart_print("not seen");
+    uart_print("\r\n");
+
+    uart_print("ESP gate release (LOW->HIGH): ");
+    if(esp_rise >= 0) { uart_print("S="); uart_print_uint((uint32_t)esp_rise); uart_print("  t="); print_sample_time((uint32_t)esp_rise); }
+    else uart_print("not seen");
+    uart_print("\r\n");
+
+    uart_print("BOOT0 fall (HIGH->LOW): ");
+    if(boot0_fall >= 0) { uart_print("S="); uart_print_uint((uint32_t)boot0_fall); uart_print("  t="); print_sample_time((uint32_t)boot0_fall); }
+    else uart_print("not seen");
+    uart_print("\r\n");
+
+    uart_print("NRST release (LOW->HIGH): ");
+    if(nrst_rise >= 0) { uart_print("S="); uart_print_uint((uint32_t)nrst_rise); uart_print("  t="); print_sample_time((uint32_t)nrst_rise); }
+    else uart_print("not seen");
+    uart_print("\r\n");
+
+    if(pa0_rise >= 0 && boot0_fall >= pa0_rise)
+    {
+        uart_print("PA0 release -> BOOT0 fall: ");
+        print_sample_time((uint32_t)(boot0_fall - pa0_rise));
+        uart_print("\r\n");
+    }
+
+    if(nrst_rise >= 0)
+    {
+        if(boot0_fall < 0)
+        {
+            uart_print("BOOT0 at NRST release: HIGH (fall not seen in window)\r\n");
+        }
+        else if(boot0_fall > nrst_rise)
+        {
+            uart_print("NRST release -> BOOT0 fall margin: ");
+            print_sample_time((uint32_t)(boot0_fall - nrst_rise));
+            uart_print("  PASS\r\n");
+        }
+        else
+        {
+            uart_print("BOOT0 fell BEFORE NRST release by ");
+            print_sample_time((uint32_t)(nrst_rise - boot0_fall));
+            uart_print("  FAIL for ROM-boot hold\r\n");
+        }
+    }
+
+    print_compact_waveform();
 }
 
 static void decode_i2c(void)
@@ -323,10 +509,38 @@ void capture_run(void)
     do_sample();
 
     if(mode == MODE_EDGE)
+    {
         decode_edges();
+        if(boot_timing_profile)
+            decode_boot_timing();
+        else
+            print_compact_waveform();
+    }
     else
         decode_i2c();
 
     raw_stats();
     uart_print("\r\nDONE\r\n");
+}
+
+
+void capture_boot_timing(void)
+{
+    boot_timing_profile = 1u;
+    capture_set_mode(MODE_EDGE);
+    capture_set_rate_enum(RATE_100K);
+    capture_set_trigger(3u, 0u);
+
+    uart_print("\r\nBOOT TIMING PROFILE\r\n");
+    uart_print("CH0 = target PA0 / Q1 authorization gate\r\n");
+    uart_print("CH1 = ESP GPIO0 / Q2 boot gate\r\n");
+    uart_print("CH2 = target STM32 BOOT0\r\n");
+    uart_print("CH3 = target STM32 NRST\r\n");
+    uart_print("Rate = 100000 Hz (10 us/sample)\r\n");
+    uart_print("Window = 81.92 ms for 8192 samples\r\n");
+    uart_print("Trigger = CH3 falling (NRST assert)\r\n");
+    uart_print("NOTE: current ESP reset-low interval is about 25 ms; 4 MHz cannot capture release.\r\n");
+
+    capture_run();
+    boot_timing_profile = 0u;
 }

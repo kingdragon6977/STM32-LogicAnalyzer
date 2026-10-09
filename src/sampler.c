@@ -107,6 +107,7 @@ void sampler_set_rate(uint32_t hz)
     uint32_t prescaler;
     uint32_t ticks;
     uint32_t period;
+    uint64_t denom;
 
     if(hz == 0u)
         return;
@@ -122,14 +123,20 @@ void sampler_set_rate(uint32_t hz)
      *   100 kHz -> PSC=0, ARR=719
      *   4 MHz   -> PSC=0, ARR=17
      */
-    prescaler = (timer_hz + (hz * 65536u) - 1u) / (hz * 65536u);
+    /*
+     * Use 64-bit math here.  hz*65536 overflows uint32_t at the normal
+     * 100 kHz, 500 kHz, 1/2/4 MHz analyzer rates.
+     */
+    denom = (uint64_t)hz * 65536ull;
+    prescaler = (uint32_t)(((uint64_t)timer_hz + denom - 1ull) / denom);
     if(prescaler > 0u)
         prescaler -= 1u;
 
     if(prescaler > 0xFFFFu)
         prescaler = 0xFFFFu;
 
-    ticks = timer_hz / ((prescaler + 1u) * hz);
+    ticks = (uint32_t)((uint64_t)timer_hz /
+                       ((uint64_t)(prescaler + 1u) * (uint64_t)hz));
     if(ticks == 0u)
         ticks = 1u;
     if(ticks > 65536u)
@@ -138,9 +145,17 @@ void sampler_set_rate(uint32_t hz)
     period = ticks - 1u;
 
     TIM_Cmd(TIM2, DISABLE);
+    TIM_DMACmd(TIM2, TIM_DMA_Update, DISABLE);
+    TIM_ITConfig(TIM2, TIM_IT_Update, DISABLE);
+
     TIM_PrescalerConfig(TIM2, (uint16_t)prescaler, TIM_PSCReloadMode_Immediate);
     TIM_SetAutoreload(TIM2, (uint16_t)period);
     TIM_SetCounter(TIM2, 0u);
+
+    /* PSC immediate reload generates an update event; never let it leak into
+       the next IRQ/DMA capture as a phantom first sample. */
+    TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
+    TIM_ClearFlag(TIM2, TIM_FLAG_Update);
 }
 
 void TIM2_IRQHandler(void)

@@ -164,15 +164,21 @@ void dma_capture_start(
 
 
     /*
-     * Start TIM2 DMA requests
+     * Start TIM2 DMA requests from a clean timer state.  sampler_set_rate()
+     * may have forced an update event while loading PSC; discard it here so
+     * the first DMA byte is produced by a real sample interval.
      */
+    TIM_Cmd(TIM2, DISABLE);
+    TIM_DMACmd(TIM2, TIM_DMA_Update, DISABLE);
+    TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
+    TIM_ClearFlag(TIM2, TIM_FLAG_Update);
+    TIM_SetCounter(TIM2, 0u);
 
     TIM_DMACmd(
         TIM2,
         TIM_DMA_Update,
         ENABLE
     );
-
 
     TIM_Cmd(
         TIM2,

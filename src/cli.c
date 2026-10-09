@@ -181,7 +181,7 @@ static void process_command(void)
         uart_print("Recommended: boot capture\r\n");
         uart_print("Boot capture uses 100 kHz = 10 us/sample, 81.92 ms total window.\r\n");
         uart_print("Trigger: CH3 falling (NRST asserted).\r\n");
-        uart_print("Reason: ESP currently holds NRST low ~25 ms, so 4 MHz/2.048 ms misses release.\r\n");
+        uart_print("ESP test timing: 20 ms BOOT0 precharge, about 2 ms NRST low.\r\n");
     }
     else if(strcmp(cmd,"freq")==0)
     {

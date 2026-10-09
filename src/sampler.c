@@ -103,15 +103,44 @@ uint8_t *sampler_get_buffer(void)
 
 void sampler_set_rate(uint32_t hz)
 {
+    uint32_t timer_hz = SystemCoreClock;
+    uint32_t prescaler;
+    uint32_t ticks;
     uint32_t period;
 
-    if(hz == 0)
+    if(hz == 0u)
         return;
 
-    /* Use SystemCoreClock rather than a hardcoded 72 MHz constant */
-    period = (SystemCoreClock / hz) - 1;
+    /*
+     * TIM2 is a 16-bit timer.  The old code used PSC=0 for every rate,
+     * which made low rates such as 1 kHz overflow ARR (71999 > 65535)
+     * and silently run much faster than requested.
+     *
+     * Choose the smallest prescaler that keeps ARR within 16 bits.
+     * On the current 72 MHz clock:
+     *   1 kHz   -> PSC=1, ARR=35999
+     *   100 kHz -> PSC=0, ARR=719
+     *   4 MHz   -> PSC=0, ARR=17
+     */
+    prescaler = (timer_hz + (hz * 65536u) - 1u) / (hz * 65536u);
+    if(prescaler > 0u)
+        prescaler -= 1u;
 
-    TIM_SetAutoreload(TIM2, period);
+    if(prescaler > 0xFFFFu)
+        prescaler = 0xFFFFu;
+
+    ticks = timer_hz / ((prescaler + 1u) * hz);
+    if(ticks == 0u)
+        ticks = 1u;
+    if(ticks > 65536u)
+        ticks = 65536u;
+
+    period = ticks - 1u;
+
+    TIM_Cmd(TIM2, DISABLE);
+    TIM_PrescalerConfig(TIM2, (uint16_t)prescaler, TIM_PSCReloadMode_Immediate);
+    TIM_SetAutoreload(TIM2, (uint16_t)period);
+    TIM_SetCounter(TIM2, 0u);
 }
 
 void TIM2_IRQHandler(void)

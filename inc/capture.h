@@ -28,6 +28,9 @@ void capture_set_rate(uint32_t hz);
 uint32_t capture_get_rate(void);
 void capture_set_rate_enum(capture_rate_t rate);
 void capture_set_trigger(uint8_t channel, uint8_t rising);
+uint8_t capture_get_trigger_channel(void);
+uint8_t capture_get_trigger_rising(void);
+void capture_boot_timing(void);
 void capture_set_backend_dma(uint8_t enable);
 uint8_t capture_get_backend_dma(void);
 

@@ -8,8 +8,93 @@
 #include <string.h>
 #include <stdint.h>
 
-static char cmd[64];
+#define CLI_LINE_SIZE 64
+#define CLI_HISTORY_SIZE 8
+
+static char cmd[CLI_LINE_SIZE];
 static uint8_t cmd_index = 0;
+static uint8_t cursor_index = 0;
+static char history[CLI_HISTORY_SIZE][CLI_LINE_SIZE];
+static uint8_t history_count = 0;
+static uint8_t history_head = 0;
+static int8_t history_pos = -1;
+static uint8_t esc_state = 0;
+static uint8_t cli_started = 0;
+
+static void cli_redraw(void)
+{
+    uint8_t i;
+
+    uart_print("\r\033[2K> ");
+    uart_print(cmd);
+
+    for(i = cmd_index; i > cursor_index; --i)
+        uart_print("\033[D");
+}
+
+static void cli_history_store(const char *line)
+{
+    uint8_t last;
+
+    if(!line[0])
+        return;
+
+    if(history_count)
+    {
+        last = (uint8_t)((history_head + CLI_HISTORY_SIZE - 1u) % CLI_HISTORY_SIZE);
+        if(strcmp(history[last], line) == 0)
+            return;
+    }
+
+    strncpy(history[history_head], line, CLI_LINE_SIZE - 1u);
+    history[history_head][CLI_LINE_SIZE - 1u] = 0;
+    history_head = (uint8_t)((history_head + 1u) % CLI_HISTORY_SIZE);
+
+    if(history_count < CLI_HISTORY_SIZE)
+        history_count++;
+}
+
+static void cli_history_recall(int direction)
+{
+    uint8_t oldest;
+    uint8_t slot;
+
+    if(!history_count)
+        return;
+
+    if(direction < 0)
+    {
+        if(history_pos < 0)
+            history_pos = (int8_t)history_count - 1;
+        else if(history_pos > 0)
+            history_pos--;
+    }
+    else
+    {
+        if(history_pos < 0)
+            return;
+
+        if(history_pos < (int8_t)history_count - 1)
+            history_pos++;
+        else
+        {
+            history_pos = -1;
+            cmd[0] = 0;
+            cmd_index = 0;
+            cursor_index = 0;
+            cli_redraw();
+            return;
+        }
+    }
+
+    oldest = (uint8_t)((history_head + CLI_HISTORY_SIZE - history_count) % CLI_HISTORY_SIZE);
+    slot = (uint8_t)((oldest + (uint8_t)history_pos) % CLI_HISTORY_SIZE);
+    strcpy(cmd, history[slot]);
+    cmd_index = (uint8_t)strlen(cmd);
+    cursor_index = cmd_index;
+    cli_redraw();
+}
+
 
 static void audio_test_help(void)
 {
@@ -31,6 +116,8 @@ static void process_command(void)
         uart_print(" help\r\n");
         uart_print(" capture\r\n");
         uart_print(" capture raw\r\n");
+        uart_print(" boot capture       (project profile: CH0=PA0 CH1=ESP CH2=BOOT0 CH3=NRST)\r\n");
+        uart_print(" boot status        (show project timing setup)\r\n");
         uart_print(" freq\r\n");
         uart_print(" mode edge\r\n");
         uart_print(" mode i2c\r\n");
@@ -76,6 +163,23 @@ static void process_command(void)
     else if(strcmp(cmd,"capture raw")==0)
     {
         capture_raw();
+    }
+    else if(strcmp(cmd,"boot capture")==0)
+    {
+        capture_boot_timing();
+    }
+    else if(strcmp(cmd,"boot status")==0)
+    {
+        uart_print("BOOT TIMING PROJECT PROFILE\r\n");
+        uart_print("---------------------------\r\n");
+        uart_print("CH0 = target PA0 / Q1 authorization gate\r\n");
+        uart_print("CH1 = ESP GPIO0 / Q2 boot gate\r\n");
+        uart_print("CH2 = target STM32 BOOT0\r\n");
+        uart_print("CH3 = target STM32 NRST\r\n");
+        uart_print("Recommended: boot capture\r\n");
+        uart_print("Boot capture uses 100 kHz = 10 us/sample, 81.92 ms total window.\r\n");
+        uart_print("Trigger: CH3 falling (NRST asserted).\r\n");
+        uart_print("Reason: ESP currently holds NRST low ~25 ms, so 4 MHz/2.048 ms misses release.\r\n");
     }
     else if(strcmp(cmd,"freq")==0)
     {
@@ -218,7 +322,17 @@ static void process_command(void)
         uart_print("Rate: ");
         uart_print_uint(capture_get_rate());
         uart_print(" Hz\r\n");
+        uart_print("Capture window: ");
+        uart_print_uint((uint32_t)(((uint64_t)8192u * 1000000ull) / capture_get_rate()));
+        uart_print(" us\r\n");
+        uart_print("Trigger: CH");
+        uart_putc((char)('0' + capture_get_trigger_channel()));
+        uart_print(capture_get_trigger_rising() ? " rising\r\n" : " falling\r\n");
+        uart_print("Backend: ");
+        uart_print(capture_get_backend_dma() ? "DMA\r\n" : "IRQ\r\n");
         uart_print("Inputs: CH0=PA0 CH1=PA1 CH2=PA2 CH3=PA3\r\n");
+        uart_print("Boot project: CH0=PA0/Q1 CH1=ESP/Q2 CH2=BOOT0 CH3=NRST\r\n");
+        uart_print("Use 'boot capture' for the 100 kHz / 81.92 ms reset timing profile.\r\n");
         uart_print("Test output: PA6=TIM3_CH1\r\n");
         uart_print("I2C snoop: CH0=SDA CH1=SCL (no bus driving)\r\n");
     }
@@ -273,28 +387,148 @@ static void process_command(void)
         uart_print("Unknown command\r\n");
     }
 
-    uart_print("> ");
     cmd_index = 0;
+    cursor_index = 0;
+    cmd[0] = 0;
+    history_pos = -1;
+    uart_print("> ");
 }
 
 void cli_task(void)
 {
+    if(!cli_started)
+    {
+        cli_started = 1u;
+        cmd[0] = 0;
+        uart_print("> ");
+    }
+
     while(uart_available())
     {
-        char c = uart_getc();
+        uint8_t ch = (uint8_t)uart_getc();
+        uint8_t i;
 
-        if(c=='\r' || c=='\n')
+        if(esc_state == 1u)
         {
-            if(cmd_index)
-                process_command();
+            if(ch == '[' || ch == 'O')
+                esc_state = 2u;
+            else
+                esc_state = 0u;
+            continue;
         }
-        else
+
+        if(esc_state == 2u)
         {
-            if(cmd_index < sizeof(cmd)-1)
+            esc_state = 0u;
+
+            if(ch == 'A')
             {
-                cmd[cmd_index++] = c;
-                uart_putc(c);
+                cli_history_recall(-1);
+                continue;
             }
+            if(ch == 'B')
+            {
+                cli_history_recall(1);
+                continue;
+            }
+            if(ch == 'C')
+            {
+                if(cursor_index < cmd_index)
+                {
+                    uart_print("\033[C");
+                    cursor_index++;
+                }
+                continue;
+            }
+            if(ch == 'D')
+            {
+                if(cursor_index > 0u)
+                {
+                    uart_print("\033[D");
+                    cursor_index--;
+                }
+                continue;
+            }
+            if(ch == 'H')
+            {
+                cursor_index = 0u;
+                cli_redraw();
+                continue;
+            }
+            if(ch == 'F')
+            {
+                cursor_index = cmd_index;
+                cli_redraw();
+                continue;
+            }
+            if(ch == '3')
+            {
+                esc_state = 3u;
+                continue;
+            }
+            continue;
+        }
+
+        if(esc_state == 3u)
+        {
+            esc_state = 0u;
+            if(ch == '~' && cursor_index < cmd_index)
+            {
+                for(i = cursor_index; i < cmd_index; ++i)
+                    cmd[i] = cmd[i + 1u];
+                cmd_index--;
+                cli_redraw();
+            }
+            continue;
+        }
+
+        if(ch == 0x1Bu)
+        {
+            esc_state = 1u;
+            continue;
+        }
+
+        if(ch == '\r' || ch == '\n')
+        {
+            if(ch == '\n' && cmd_index == 0u)
+                continue;
+
+            if(cmd_index)
+            {
+                cmd[cmd_index] = 0;
+                cli_history_store(cmd);
+                process_command();
+            }
+            else
+            {
+                uart_print("\r\n> ");
+            }
+            continue;
+        }
+
+        if(ch == 0x08u || ch == 0x7Fu)
+        {
+            if(cursor_index > 0u)
+            {
+                for(i = (uint8_t)(cursor_index - 1u); i < cmd_index; ++i)
+                    cmd[i] = cmd[i + 1u];
+                cursor_index--;
+                cmd_index--;
+                cli_redraw();
+            }
+            continue;
+        }
+
+        if(ch >= 0x20u && ch <= 0x7Eu && cmd_index < CLI_LINE_SIZE - 1u)
+        {
+            for(i = cmd_index; i > cursor_index; --i)
+                cmd[i] = cmd[i - 1u];
+
+            cmd[cursor_index] = (char)ch;
+            cursor_index++;
+            cmd_index++;
+            cmd[cmd_index] = 0;
+            cli_redraw();
         }
     }
 }

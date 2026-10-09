@@ -5,6 +5,7 @@
 #include "i2c_master.h"
 #include "freq_counter.h"
 #include "board.h"
+#include "sampler.h"
 #include <string.h>
 #include <stdint.h>
 
@@ -155,6 +156,7 @@ static void process_command(void)
         uart_print(" backend dma\r\n");
         uart_print(" backend irq\r\n");
         uart_print(" status\r\n");
+        uart_print(" Line editing: Left/Right, Home/End, Backspace/Delete; Up/Down = 8-command history\r\n");
     }
     else if(strcmp(cmd,"capture")==0)
     {
@@ -323,7 +325,7 @@ static void process_command(void)
         uart_print_uint(capture_get_rate());
         uart_print(" Hz\r\n");
         uart_print("Capture window: ");
-        uart_print_uint((uint32_t)(((uint64_t)8192u * 1000000ull) / capture_get_rate()));
+        uart_print_uint((uint32_t)(((uint64_t)CAPTURE_SAMPLES * 1000000ull) / capture_get_rate()));
         uart_print(" us\r\n");
         uart_print("Trigger: CH");
         uart_putc((char)('0' + capture_get_trigger_channel()));
